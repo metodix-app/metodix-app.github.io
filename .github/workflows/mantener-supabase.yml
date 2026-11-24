@@ -1,0 +1,25 @@
+# Supabase (plan gratuito) pone el proyecto en pausa si pasa una semana sin uso.
+# Esta tarea de GitHub le hace una consulta cada 3 días para que no se pause.
+# Se puede lanzar a mano desde la pestaña «Actions» > «Mantener Supabase activo» > «Run workflow».
+name: Mantener Supabase activo
+
+on:
+  schedule:
+    - cron: '17 6 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consulta a la base de datos
+        run: |
+          URL="https://rnbqhzoxmvavktleiblc.supabase.co"
+          KEY="sb_publishable_ZSof4H6DRxPIhFRZIGQnbA_YuK281gm"
+          for p in "rest/v1/docs?select=path&limit=1" "auth/v1/settings"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$URL/$p" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+            echo "$p -> $code"
+          done
+          # Si el proyecto ya estuviera en pausa, la respuesta sería 540 o similar
+          code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$URL/auth/v1/settings" -H "apikey: $KEY")
+          if [ "$code" -ge 500 ] || [ "$code" = "000" ]; then echo "Supabase no responde: puede estar en pausa"; exit 1; fi
