@@ -1725,17 +1725,20 @@ function who(uid){ return S.names[uid] || 'Entrenador sin nombre (' + String(uid
      · coordinación  → privado/evaluaciones/<id> y una copia de solo lectura
                         en la cuenta de cada entrenador del equipo. */
 var EV_AREAS = [
-  {id:'tec',nombre:'Técnica',aspectos:[['tec1','Control del balón'],['tec12','Primer toque'],['tec2','Pase corto'],['tec3','Pase largo'],['tec13','Cambio de orientación'],['tec4','Conducción'],['tec5','Regate'],['tec14','1 contra 1 en ataque'],['tec6','Tiro'],['tec15','Finalización'],['tec10','Tiros lejanos'],['tec7','Juego de cabeza'],['tec9','Centros'],['tec11','Faltas'],['tec17','Penaltis'],['tec8','Perfil corporal'],['tec16','Orientación del cuerpo']]},
-  {id:'tac',nombre:'Táctica',aspectos:[['tac1','Toma de decisiones'],['tac2','Visión de juego'],['tac3','Desmarques'],['tac14','Tercer hombre'],['tac15','Juego de pared'],['tac10','Ocupación de espacios'],['tac4','Posicionamiento defensivo'],['tac5','Presión tras pérdida'],['tac11','Repliegue'],['tac6','Comprensión del modelo de juego'],['tac7','Marcaje'],['tac8','Anticipación'],['tac12','Intercepciones'],['tac9','Entradas'],['tac13','Robo de balón']]},
-  {id:'pos',nombre:'Posicional',aspectos:[['pos1','Posicionamiento ofensivo'],['pos2','Mantiene su posición en el sistema'],['pos3','Recibe perfilado, de cara al juego'],['pos4','Control orientado'],['pos5','Mira antes de recibir'],['pos6','Perfil defensivo en el 1 contra 1'],['pos7','Pierna no dominante'],['pos8','Lateralidad: juega hacia ambos lados'],['pos9','Amplitud'],['pos12','Profundidad'],['pos10','Apoyos'],['pos13','Líneas de pase'],['pos11','Coberturas'],['pos14','Basculación']]},
-  {id:'fis',nombre:'Física',aspectos:[['fis1','Velocidad'],['fis5','Aceleración'],['fis2','Resistencia'],['fis3','Fuerza'],['fis4','Coordinación'],['fis9','Agilidad'],['fis7','Equilibrio'],['fis6','Salto'],['fis8','Potencia de tiro']]},
-  {id:'psi',nombre:'Psicológica',aspectos:[['psi1','Concentración'],['psi2','Competitividad'],['psi3','Confianza'],['psi4','Gestión del error'],['psi5','Compostura bajo presión'],['psi6','Reacciones'],['psi7','Agresividad'],['psi8','Intensidad']]},
-  {id:'soc',nombre:'Social',aspectos:[['soc1','Compañerismo'],['soc2','Comunicación'],['soc3','Actitud'],['soc5','Compromiso'],['soc4','Respeto a compañeros'],['soc6','Respeto a rivales'],['soc7','Respeto a árbitros']]}
+  {id:'tec',nombre:'Técnica',aspectos:[['tec_ctrl','Control orientado'],['tec_pc','Pase corto'],['tec_pl','Pase largo y cambio de orientación'],['tec_cond','Conducción'],['tec_reg','Regate y 1 contra 1'],['tec_tiro','Tiro y finalización'],['tec_lat','Pierna no dominante y juego hacia los dos lados']]},
+  {id:'cb',nombre:'Con balón',aspectos:[['cb_perfil','Perfil y orientación al recibir'],['cb_mira','Mira antes de recibir'],['cb_dec','Toma de decisiones'],['cb_desm','Desmarque y apoyos'],['cb_3h','Pared y tercer hombre'],['cb_esp','Amplitud y profundidad']]},
+  {id:'sb',nombre:'Sin balón',aspectos:[['sb_ptp','Presión tras pérdida'],['sb_repl','Repliegue y posicionamiento defensivo'],['sb_marc','Marcaje y anticipación'],['sb_1x1','Duelo defensivo 1 contra 1']]},
+  {id:'fis',nombre:'Física',aspectos:[['fis_vel','Velocidad y aceleración'],['fis_res','Resistencia'],['fis_coord','Coordinación y agilidad'],['fis_fza','Fuerza y salto (desde Infantil)']]},
+  {id:'psi',nombre:'Psicológica',aspectos:[['psi_conc','Concentración'],['psi_conf','Confianza y gestión del error'],['psi_comp','Competitividad e intensidad']]},
+  {id:'soc',nombre:'Social',aspectos:[['soc_act','Actitud y compromiso'],['soc_comp','Compañerismo y comunicación'],['soc_resp','Respeto']]},
+  {id:'por',nombre:'Portero',gk:1,aspectos:[['por_bloc','Blocaje y desvío'],['por_sal','Salidas y 1 contra 1'],['por_pie','Juego con el pie y saque'],['por_col','Colocación']]}
 ];
+function evAreasFor(j){ return EV_AREAS.filter(function(a){ return !a.gk || (j && j.pt); }); }
 S.evBy = {}; S.evSrc = {};
 function evMean(a){ var v = a.filter(function(x){ return typeof x === 'number'; }); return v.length ? v.reduce(function(s,x){ return s+x; },0)/v.length : null; }
-function evAreas(ev){ return EV_AREAS.map(function(a){ return ev ? evMean(a.aspectos.map(function(x){ return ev.notas ? ev.notas[x[0]] : null; })) : null; }); }
-function evOverall(ev){ return evMean(evAreas(ev)); }
+function evAreas(ev, j){ return EV_AREAS.map(function(a){ return ev && (!a.gk || !j || j.pt) ? evMean(a.aspectos.map(function(x){ return ev.notas ? ev.notas[x[0]] : null; })) : null; }); }
+function evOverall(ev, j){ return evMean(evAreas(ev, j)); }
+function evPick(vals, j){ return EV_AREAS.map(function(a,i){ return (!a.gk || (j && j.pt)) ? vals[i] : undefined; }).filter(function(v){ return v !== undefined; }); }
 function evFmt(n){ return n == null ? '–' : (Math.round(n*10)/10).toFixed(1).replace('.',','); }
 function evLabel(v){ return v === 'na' ? 'N/A' : (typeof v === 'number' ? v : '–'); }
 function evFecha(s){ if(!s) return 'Sin fecha'; var m = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], p = s.split('-'); return p.length === 3 ? (+p[2]) + ' ' + m[(+p[1])-1] + ' ' + p[0] : s; }
@@ -1788,7 +1791,8 @@ async function evDelete(id){
   for(var i = 0; i < paths.length; i++){ await S.db.collection(paths[i]).doc(id).delete(); delete S.evBy[paths[i]][id]; }
   evMerge();
 }
-function evRadar(vals, prev){
+function evRadar(vals, prev, areas){
+  areas = areas || EV_AREAS;
   var n = vals.length, cx = 180, cy = 140, R = 96, out = '';
   function pt(i, v){ var a = -Math.PI/2 + i*2*Math.PI/n, r = R*(v||0)/10; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
   function poly(vs){ return vs.map(function(v,i){ var p = pt(i, v); return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' '); }
@@ -1801,10 +1805,10 @@ function evRadar(vals, prev){
     var a = -Math.PI/2 + i*2*Math.PI/n, c = Math.cos(a), s = Math.sin(a);
     var lx = cx + (R+14)*c, ly = cy + (R+14)*s + (s < -0.5 ? -14 : s > 0.5 ? 14 : -2);
     var anchor = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle';
-    out += '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="'+anchor+'" font-size="13" font-weight="600" fill="var(--muted)">'+esc(EV_AREAS[i].nombre)+'</text>';
+    out += '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="'+anchor+'" font-size="13" font-weight="600" fill="var(--muted)">'+esc(areas[i].nombre)+'</text>';
     out += '<text x="'+lx.toFixed(1)+'" y="'+(ly+16).toFixed(1)+'" text-anchor="'+anchor+'" font-size="16" font-weight="700" fill="var(--ink)">'+evFmt(v)+'</text>';
   });
-  return '<svg class="radar" viewBox="0 0 360 290" role="img" aria-label="Perfil por áreas: '+esc(EV_AREAS.map(function(a,i){ return a.nombre+' '+evFmt(vals[i]); }).join(', '))+'">'+out+'</svg>';
+  return '<svg class="radar" viewBox="0 0 360 290" role="img" aria-label="Perfil por áreas: '+esc(areas.map(function(a,i){ return a.nombre+' '+evFmt(vals[i]); }).join(', '))+'">'+out+'</svg>';
 }
 function evBars(vals){ return '<span class="pbars" aria-hidden="true">'+vals.map(function(v){ return v == null ? '<i class="nil"></i>' : '<i style="height:'+Math.max(2, Math.round(v*3))+'px"></i>'; }).join('')+'</span>'; }
 function evPlayer(tid, jid){ return plantilla(tid).filter(function(j){ return j.id === jid; })[0]; }
@@ -1816,7 +1820,7 @@ function evCard(t){
   if(!pl.length) return h + '<p class="note">Añade primero la plantilla del equipo.</p></details>';
   h += '<ul class="plist">' + pl.slice().sort(function(a,b){ return (+a.d || 999) - (+b.d || 999) || String(a.n).localeCompare(String(b.n), 'es'); }).map(function(j){
     var ev = evalsOf(t.id, j.id)[0];
-    return '<li><button type="button" class="prow" data-ev="ver" data-t="' + t.id + '" data-j="' + esc(j.id) + '"><span class="pnum">' + esc(j.d || '–') + '</span><span><span class="pname">' + esc(j.n) + '</span><span class="psub">' + (j.pt ? 'Portero · ' : '') + (ev ? 'Última: ' + evFecha(ev.fecha) : 'Sin evaluar') + '</span></span>' + evBars(evAreas(ev)) + '<span class="pavg">' + evFmt(evOverall(ev)) + '</span></button></li>';
+    return '<li><button type="button" class="prow" data-ev="ver" data-t="' + t.id + '" data-j="' + esc(j.id) + '"><span class="pnum">' + esc(j.d || '–') + '</span><span><span class="pname">' + esc(j.n) + '</span><span class="psub">' + (j.pt ? 'Portero · ' : '') + (ev ? 'Última: ' + evFecha(ev.fecha) : 'Sin evaluar') + '</span></span>' + evBars(evPick(evAreas(ev, j), j)) + '<span class="pavg">' + evFmt(evOverall(ev, j)) + '</span></button></li>';
   }).join('') + '</ul>';
   h += '<div class="row"><button type="button" class="btn ghost small" data-ev="tabla" data-t="' + t.id + '">Tabla del equipo</button></div>';
   return h + '</details>';
@@ -1827,11 +1831,11 @@ function vEvJugador(){
   var v = S.view, t = team(v.t), j = evPlayer(v.t, v.j);
   if(!t || !j){ S.view = {name:'home'}; return vHome(); }
   var evs = evalsOf(v.t, v.j), ev = evs.filter(function(e){ return e.id === v.evId; })[0] || evs[0];
-  var prev = ev ? evs[evs.indexOf(ev)+1] : null, am = evAreas(ev), pm = prev ? evAreas(prev) : null;
+  var prev = ev ? evs[evs.indexOf(ev)+1] : null, ars = evAreasFor(j), am = evPick(evAreas(ev, j), j), pm = prev ? evPick(evAreas(prev, j), j) : null;
   var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="volver">‹ Volver</button><span class="ttl">' + esc(t.n) + ' · Evaluación</span></div></div><main class="inner ev"><div class="evgrid"><div>';
   h += '<section class="cromo"><div class="cromo-top">' + (j.d ? '<span class="dorsal" aria-label="Dorsal ' + esc(j.d) + '">' + esc(j.d) + '</span>' : '') +
-    '<div class="cromo-id"><h2>' + esc(j.n) + '</h2><p>' + esc([t.n, j.pt ? 'Portero' : ''].filter(Boolean).join(' · ')) + '</p></div><div class="media"><b>' + evFmt(evOverall(ev)) + '</b><span>Media</span></div></div>';
-  h += evRadar(am, pm);
+    '<div class="cromo-id"><h2>' + esc(j.n) + '</h2><p>' + esc([t.n, j.pt ? 'Portero' : ''].filter(Boolean).join(' · ')) + '</p></div><div class="media"><b>' + evFmt(evOverall(ev, j)) + '</b><span>Media</span></div></div>';
+  h += evRadar(am, pm, ars);
   if(ev) h += '<div class="legend"><span><i></i>' + evFecha(ev.fecha) + '</span>' + (prev ? '<span><i class="prev"></i>' + evFecha(prev.fecha) + '</span>' : '') + '</div>';
   h += '</section>';
   if(!S.readOnly) h += '<div class="row" style="margin:14px 0"><button type="button" class="btn" data-ev="nueva">Nueva evaluación</button></div>';
@@ -1839,12 +1843,12 @@ function vEvJugador(){
   if(!ev) h += '<div class="empty" style="margin-top:0"><strong>Sin evaluaciones todavía</strong>Crea la primera para ver su perfil por áreas.</div>';
   else {
     h += '<section class="card"><h3 class="evh">Áreas</h3>';
-    EV_AREAS.forEach(function(a,i){
+    ars.forEach(function(a,i){
       var d = (pm && am[i] != null && pm[i] != null) ? am[i]-pm[i] : null;
       var dt = d == null ? '' : (Math.abs(d) < 0.05 ? '=' : (d > 0 ? '+' : '−') + evFmt(Math.abs(d)));
       h += '<div class="abar"><span class="nm">' + esc(a.nombre) + '</span><span class="track"><i style="width:' + ((am[i]||0)*10) + '%"></i></span><span class="v">' + evFmt(am[i]) + '</span><span class="d">' + dt + '</span></div>';
     });
-    EV_AREAS.forEach(function(a){
+    ars.forEach(function(a){
       h += '<details class="evd"><summary>' + esc(a.nombre) + ' al detalle <span>' + a.aspectos.length + ' aspectos</span></summary>' + a.aspectos.map(function(x){
         var val = ev.notas ? ev.notas[x[0]] : null;
         return '<div class="asprow"><span>' + esc(x[1]) + '</span><span class="track"><i style="width:' + ((typeof val === 'number' ? val : 0)*10) + '%"></i></span><b>' + evLabel(val) + '</b></div>';
@@ -1854,7 +1858,7 @@ function vEvJugador(){
     if(ev.fortalezas || ev.mejorar || ev.objetivo) h += '<section class="card obs" style="margin-top:14px"><h3 class="evh">Observaciones</h3>' + (ev.fortalezas ? '<p><b>Puntos fuertes</b>' + esc(ev.fortalezas) + '</p>' : '') + (ev.mejorar ? '<p><b>A mejorar</b>' + esc(ev.mejorar) + '</p>' : '') + (ev.objetivo ? '<p><b>Objetivo</b>' + esc(ev.objetivo) + '</p>' : '') + '</section>';
     h += '<section class="card" style="margin-top:14px"><h3 class="evh">Evaluaciones guardadas</h3><ul class="hist">' + evs.map(function(e){
       var ed = evCanEdit(e);
-      return '<li><button type="button" class="sel" data-ev="pick" data-id="' + esc(e.id) + '" aria-current="' + (e === ev) + '">' + evFecha(e.fecha) + (e.autorN ? ' · ' + esc(e.autorN) : '') + '</button><span class="hv">' + evFmt(evOverall(e)) + '</span>' +
+      return '<li><button type="button" class="sel" data-ev="pick" data-id="' + esc(e.id) + '" aria-current="' + (e === ev) + '">' + evFecha(e.fecha) + (e.autorN ? ' · ' + esc(e.autorN) : '') + '</button><span class="hv">' + evFmt(evOverall(e, j)) + '</span>' +
         (ed ? '<button type="button" class="linkbtn" data-ev="editar" data-id="' + esc(e.id) + '">Editar</button><button type="button" class="linkbtn danger" data-ev="borrar" data-id="' + esc(e.id) + '">' + (S.evConfirm === e.id ? 'Confirmar' : 'Eliminar') + '</button>' : '') + '</li>';
     }).join('') + '</ul></section>';
   }
@@ -1867,8 +1871,9 @@ function vEvaluar(){
   var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="cancelar">‹ Cancelar</button><span class="ttl">' + esc(j.n) + '</span></div></div><main class="inner ev" style="padding-bottom:120px">';
   h += '<div class="field" style="margin-top:16px;max-width:260px"><label for="ev-fecha">Fecha de la evaluación</label><input id="ev-fecha" type="date" data-evf="fecha" value="' + esc(d.fecha) + '"></div>';
   h += '<p class="note">' + (d.prefill ? 'Parte de las notas de su última evaluación: cambia solo lo que haya variado. ' : 'Toca una nota del 0 al 10. ') + 'Lo que marques como «No aplica» o dejes sin valorar no cuenta en las medias.</p>';
-  var am = evAreas(d);
+  var am = evAreas(d, j);
   EV_AREAS.forEach(function(a,i){
+    if(a.gk && !j.pt) return;
     h += '<section class="area"><div class="area-head"><h3>' + esc(a.nombre) + '</h3><span data-area-mean="' + i + '">' + evFmt(am[i]) + '</span></div>';
     a.aspectos.forEach(function(x){
       var v = d.notas[x[0]], segs = '';
@@ -1890,13 +1895,13 @@ function evPaintRow(asp){
   row.querySelectorAll('.seg').forEach(function(b){ var n = +b.dataset.n; b.classList.toggle('on', typeof v === 'number' && n <= v); b.classList.toggle('cur', v === n); b.setAttribute('aria-checked', String(v === n)); });
   row.querySelector('.na').setAttribute('aria-pressed', String(v === 'na'));
   row.querySelector('.asp-val').textContent = evLabel(v);
-  var am = evAreas(d); document.querySelectorAll('[data-area-mean]').forEach(function(el){ el.textContent = evFmt(am[+el.dataset.areaMean]); });
+  var am = evAreas(d, evPlayer(d.t, d.j)); document.querySelectorAll('[data-area-mean]').forEach(function(el){ el.textContent = evFmt(am[+el.dataset.areaMean]); });
 }
 
 /* Tabla del equipo */
 function vEvTabla(){
   var t = team(S.view.t); if(!t){ S.view = {name:'home'}; return vHome(); }
-  var rows = plantilla(t.id).map(function(j){ var ev = evalsOf(t.id, j.id)[0]; return {j:j, am:evAreas(ev), ov:evOverall(ev)}; })
+  var rows = plantilla(t.id).map(function(j){ var ev = evalsOf(t.id, j.id)[0]; return {j:j, am:evAreas(ev, j), ov:evOverall(ev, j)}; })
     .filter(function(r){ return r.ov != null; }).sort(function(a,b){ return b.ov - a.ov; });
   var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="volverHome">‹ Volver</button><span class="ttl">' + esc(t.n) + ' · Tabla del equipo</span></div></div><main class="inner ev">';
   if(!rows.length) return h + '<div class="empty"><strong>Aún no hay nada que comparar</strong>Cuando evalúes a los jugadores, aquí verás la tabla del equipo con la media de cada área.</div></main>';
