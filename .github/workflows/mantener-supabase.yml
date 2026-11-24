@@ -17,8 +17,8 @@ jobs:
           URL="https://rnbqhzoxmvavktleiblc.supabase.co"
           KEY="sb_publishable_ZSof4H6DRxPIhFRZIGQnbA_YuK281gm"
           for p in "rest/v1/docs?select=path&limit=1" "auth/v1/settings"; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$URL/$p" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
-            echo "$p -> $code"
+            body=$(curl -s -m 30 "$URL/$p" -H "apikey: $KEY"); code=$?
+            echo "$p -> $(echo "$body" | head -c 160)"
           done
           # Si el proyecto ya estuviera en pausa, la respuesta sería 540 o similar
           code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$URL/auth/v1/settings" -H "apikey: $KEY")
