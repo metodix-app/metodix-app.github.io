@@ -1910,7 +1910,7 @@ function vEvTabla(){
 function evParseLista(txt){
   var out = [];
   String(txt || '').split(/\r?\n/).forEach(function(l){
-    l = l.replace(/^\s*[-•*·]\s*/, '').trim(); if(!l) return;
+    l = l.replace(/^\s*[-•*·]\s*/, '').trim(); if(!l) return; if(/^=|====|plantillas para pegar|copia el bloque/i.test(l) || l.length > 70) return;
     var pt = /\b(portero|portera|guardameta|POR)\b|\((P|POR)\)/i.test(l);
     l = l.replace(/[,;(\-–]*\s*\b(portero|portera|guardameta)\b\s*\)?/ig, ' ').replace(/\((P|POR)\)/ig, ' ');
     var m = l.match(/^\s*(\d{1,2})\s*[.)\-–:\t ]\s*(.+)$/), d = '', n = l;
