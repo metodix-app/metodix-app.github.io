@@ -225,6 +225,81 @@ body.brand .banner{background:#F3F6FB;border-left-color:var(--sky)}
 .brand-flag{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:0 0 16px}
 .brand-flag i{flex:1}
 .band .inner{align-items:center}
+/* Evaluación individual */
+.ev .plist{list-style:none;margin:12px 0;padding:0;display:grid;gap:8px}
+.ev .prow{width:100%;display:grid;grid-template-columns:44px minmax(0,1fr) auto 50px;align-items:center;gap:12px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ev .pnum{font:700 24px/1 var(--display);color:var(--navy);background:var(--gold);border-radius:9px;height:44px;display:grid;place-items:center}
+.ev .pname{display:block;font:600 19px/1.15 var(--display)}
+.ev .psub{display:block;font-size:13.5px;color:var(--muted)}
+.ev .pbars{display:flex;align-items:flex-end;gap:3px;height:30px}
+.ev .pbars i{display:block;width:6px;border-radius:2px 2px 0 0;background:var(--gold);min-height:2px}
+.ev .pbars i.nil{background:var(--seg);height:2px}
+.ev .pavg{font:700 24px/1 var(--display);text-align:right}
+@media (max-width:420px){.ev .prow{grid-template-columns:40px minmax(0,1fr) 46px}.ev .pbars{display:none}}
+.evgrid{display:grid;gap:16px;margin-top:16px}
+@media (min-width:860px){.evgrid{grid-template-columns:380px minmax(0,1fr);align-items:start}}
+.ev .cromo{background:var(--metal);border-radius:18px;padding:20px 18px 12px;border:1px solid var(--line);border-bottom:5px solid var(--gold)}
+.ev .cromo-top{display:flex;align-items:flex-end;gap:14px}
+.ev .dorsal{font:700 84px/.78 var(--display);color:var(--navy)}
+.ev .cromo-id{flex:1;min-width:0}
+.ev .cromo-id h2{font:700 29px/1 var(--display);text-transform:uppercase;overflow-wrap:break-word}
+.ev .cromo-id p{font-size:14.5px;color:var(--muted);margin-top:5px}
+.ev .media{flex:none;background:var(--gold);color:var(--navy);border-radius:12px;padding:8px 10px 6px;text-align:center;min-width:70px}
+.ev .media b{display:block;font:700 40px/.95 var(--display)}
+.ev .media span{font:600 13px/1 var(--display)}
+.ev .radar{display:block;width:100%;height:auto;margin-top:8px;font-family:var(--display)}
+.ev .legend{display:flex;gap:16px;justify-content:center;font-size:13px;color:var(--muted);padding-bottom:6px}
+.ev .legend i{display:inline-block;width:18px;height:0;border-top:3px solid var(--gold);vertical-align:middle;margin-right:6px}
+.ev .legend i.prev{border-top:2px dashed var(--navy)}
+.ev .evh{font:700 21px/1.1 var(--display);margin-bottom:6px}
+.ev .abar{display:grid;grid-template-columns:96px minmax(0,1fr) 40px 44px;align-items:center;gap:10px;padding:6px 0}
+.ev .abar .nm{font:600 16.5px/1.1 var(--display)}
+.ev .track{height:12px;border-radius:6px;background:var(--seg);overflow:hidden;display:block}
+.ev .track i{display:block;height:100%;background:var(--gold);border-radius:6px}
+.ev .abar .v{font:700 20px/1 var(--display);text-align:right}
+.ev .abar .d{font-size:13px;color:var(--muted);text-align:right}
+.ev details.evd{border-top:1px solid var(--line)}
+.ev details.evd summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0;font:600 17.5px/1 var(--display);cursor:pointer}
+.ev details.evd summary::-webkit-details-marker{display:none}
+.ev details.evd summary span{color:var(--muted);font-weight:500}
+.ev .asprow{display:grid;grid-template-columns:minmax(0,1fr) 84px 34px;align-items:center;gap:10px;padding:5px 0;font-size:14.5px}
+.ev .asprow .track{height:8px}
+.ev .asprow b{font:700 17px/1 var(--display);text-align:right}
+.ev .obs p{margin-bottom:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.ev .obs b{display:block;font:600 16px/1.2 var(--display);color:var(--muted)}
+.ev .hist{list-style:none;margin:0;padding:0}
+.ev .hist li{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:6px 0}
+.ev .hist li:first-child{border-top:0}
+.ev .hist .sel{flex:1;text-align:left;background:none;border:0;padding:10px 0;font-size:15.5px}
+.ev .hist .sel[aria-current="true"]{font-weight:700}
+.ev .hist .hv{font:700 20px/1 var(--display)}
+.ev .linkbtn{background:none;border:0;padding:10px 6px;font:600 15.5px/1 var(--display);color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.ev .linkbtn.danger{color:var(--red)}
+.ev .area{margin-top:22px}
+.ev .area-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--gold);padding-bottom:6px;margin-bottom:6px}
+.ev .area-head h3{font:700 24px/1 var(--display)}
+.ev .area-head span{font:700 22px/1 var(--display)}
+.ev .asp{padding:10px 0 12px;border-bottom:1px solid var(--line)}
+.ev .asp-head{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ev .asp-name{font-weight:500;font-size:15.5px;flex:1;min-width:0}
+.ev .na{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font:600 14px/1 var(--display);color:var(--muted)}
+.ev .na[aria-pressed="true"]{background:var(--seg);border-color:var(--navy);color:var(--ink)}
+.ev .asp-val{font:700 20px/1 var(--display);min-width:34px;text-align:right}
+.ev .segs{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:2px}
+.ev .seg{height:44px;padding:0;border:0;border-radius:5px;background:var(--seg);color:var(--muted);font:600 15px/1 var(--display)}
+.ev .seg.on{background:var(--gold);color:var(--navy)}
+.ev .seg.cur{box-shadow:inset 0 0 0 2px var(--navy)}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.ev .evt table{min-width:440px}
+.ev .evt th,.ev .evt td{text-align:center;padding:9px 4px}
+.ev .evt th:first-child,.ev .evt td:first-child{text-align:left;padding-left:12px}
+.ev .evt td{font:600 17px/1 var(--display)}
+.ev .evt td:first-child{font:500 15px/1.2 var(--body)}
+.ev .evt td:first-child small{color:var(--muted);font:700 15px/1 var(--display);margin-right:6px}
+.ev .evt tbody td:last-child,.ev .evt tfoot td:last-child{background:rgba(201,162,39,.3)}
+.ev .evt tfoot td{border-top:2px solid var(--gold);background:var(--seg)}
+.paste summary{list-style:none;cursor:pointer}
+.paste summary::-webkit-details-marker{display:none}
 </style>
 </head>
 <body>
@@ -1035,10 +1110,10 @@ function asisHtml(s, editable){
 }
 function rosterHtml(t){
   var pl = plantilla(t.id), ed = !S.readOnly;
-  var h = '<details class="card" style="margin-top:14px"><summary><b style="font:600 18px/1 var(--display)">Plantilla · ' + pl.length + ' jugadores</b> <span class="note">(' + pl.filter(function(j){ return j.pt; }).length + ' porteros)</span></summary>';
+  var h = '<details class="card" style="margin-top:14px"' + keepD('pl-' + t.id) + '><summary><b style="font:600 18px/1 var(--display)">Plantilla · ' + pl.length + ' jugadores</b> <span class="note">(' + pl.filter(function(j){ return j.pt; }).length + ' porteros)</span></summary>';
   h += '<ul class="rl">' + pl.map(function(j){ return '<li><span>' + esc((j.d ? j.d + ' · ' : '') + j.n) + (j.pt ? ' <span class="pill">Portero</span>' : '') + '</span>' + (ed ? '<span><button type="button" class="btn ghost small" data-act="rGk" data-t="' + t.id + '" data-j="' + esc(j.id) + '">' + (j.pt ? 'Quitar portero' : 'Portero') + '</button> <button type="button" class="btn danger small" data-act="rDel" data-t="' + t.id + '" data-j="' + esc(j.id) + '">Quitar</button></span>' : '') + '</li>'; }).join('') + '</ul>';
   if(ed) h += '<div class="row" style="align-items:end"><div class="field" style="width:80px"><label for="rd">Dorsal</label><input id="rd" inputmode="numeric"></div><div class="field" style="flex:1;min-width:160px"><label for="rn">Nombre y apellidos</label><input id="rn"></div><label class="ck"><input type="checkbox" id="rp"> Portero</label><button type="button" class="btn ghost small" data-act="rAdd" data-t="' + t.id + '">Añadir</button></div>';
-  return h + '</details>';
+  return h + pasteHtml(t) + '</details>';
 }
 async function saveRoster(){
   var tid = S.rTid; if(!tid) return;
@@ -1082,8 +1157,8 @@ try{ var r0 = localStorage.getItem(LS + '-rol'); if(r0 && (r0 === 'coord' || TEA
 (function(){ var t = today(), d = pdate(t).getDay(); S.week = monday(d === 0 || d === 6 ? addDays(t, 2) : t); })();
 var app = document.getElementById('app');
 
-function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({sessions:S.sessions, config:S.config, plant:S.plant})); }catch(e){} }
-function loadLocal(){ try{ var d = JSON.parse(localStorage.getItem(LS) || '{}'); S.sessions = d.sessions || {}; S.config = d.config || {}; S.plant = d.plant || null; }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(LS, JSON.stringify({sessions:S.sessions, config:S.config, plant:S.plant, ev:(S.evBy && S.evBy.local) || {}})); }catch(e){} }
+function loadLocal(){ try{ var d = JSON.parse(localStorage.getItem(LS) || '{}'); S.sessions = d.sessions || {}; S.config = d.config || {}; S.plant = d.plant || null; S.evBy = {local:d.ev || {}}; evMerge(); }catch(e){} }
 function clean(s){ var c = JSON.parse(JSON.stringify(s)); delete c.id; delete c.virtual; return c; }
 async function saveSession(s){
   s.virtual = false; s.actualizado = Date.now();
@@ -1620,17 +1695,17 @@ async function init(){
   db.doc('config/asignaciones').onSnapshot(function(snap){
     var d = snap.exists ? (snap.data() || {}) : {}; S.asig = d.entrenadores || {};
     ME.teams = ME.uid ? (S.asig[ME.uid] || []) : [];
-    if(ME.owner){ Object.keys(S.asig).forEach(function(c){ watchSes(sesCol(c)); watchPlant(c); }); askNames(Object.keys(S.asig)); }
+    if(ME.owner){ Object.keys(S.asig).forEach(function(c){ watchSes(sesCol(c)); watchPlant(c); evWatch('cuentas/' + c + '/evaluaciones'); }); askNames(Object.keys(S.asig)); }
     else if(S.ready && S.role && !roleOk(S.role)) S.role = null;
     if(!ME.owner && S.ready && !S.role && ME.teams.length === 1) S.role = ME.teams[0];
     mergeSessions(); ready('asig');
   }, function(){ ready('asig'); });
   if(ME.owner){
-    watchSes('sesiones');
+    watchSes('sesiones'); evWatch('privado/evaluaciones');
     db.doc('privado/plantillas').onSnapshot(function(snap){ S.pMaster = snap.exists ? (snap.data() || {}) : {}; recomputePlant(); if(S.ready) softRender(); }, function(){});
     db.collection('solicitudes').onSnapshot(function(snap){ var m = {}; snap.docs.forEach(function(d){ m[d.id] = d.data(); }); S.sol = m; askNames(Object.keys(m)); if(S.ready) softRender(); }, function(){});
   } else if(ME.uid){
-    watchSes(sesCol(ME.uid)); watchPlant(ME.uid);
+    watchSes(sesCol(ME.uid)); watchPlant(ME.uid); evWatch('cuentas/' + ME.uid + '/evaluaciones');
     db.doc('solicitudes/' + ME.uid).onSnapshot(function(snap){ ME.solMine = snap.exists ? snap.data() : null; if(S.ready) softRender(); }, function(){});
   } else { got.ses = true; }
 }
@@ -1641,6 +1716,279 @@ async function askNames(ids){
   try{ var ps = await S.user.profiles(ids) || {}; ids.forEach(function(i){ S.names[i] = (ps[i] && ps[i].name) || ''; }); if(S.ready) softRender(); }catch(e){}
 }
 function who(uid){ return S.names[uid] || 'Entrenador sin nombre (' + String(uid).slice(-5) + ')'; }
+
+
+/* ================= EVALUACIÓN INDIVIDUAL (0 a 10) =================
+   Ficha de cada jugador de la plantilla con notas de 0 a 10 por aspecto y «No aplica».
+   Dónde se guarda:
+     · el entrenador → cuentas/<su id>/evaluaciones/<id>   (solo él y coordinación)
+     · coordinación  → privado/evaluaciones/<id> y una copia de solo lectura
+                        en la cuenta de cada entrenador del equipo. */
+var EV_AREAS = [
+  {id:'tec',nombre:'Técnica',aspectos:[['tec1','Control del balón'],['tec12','Primer toque'],['tec2','Pase corto'],['tec3','Pase largo'],['tec13','Cambio de orientación'],['tec4','Conducción'],['tec5','Regate'],['tec14','1 contra 1 en ataque'],['tec6','Tiro'],['tec15','Finalización'],['tec10','Tiros lejanos'],['tec7','Juego de cabeza'],['tec9','Centros'],['tec11','Faltas'],['tec17','Penaltis'],['tec8','Perfil corporal'],['tec16','Orientación del cuerpo']]},
+  {id:'tac',nombre:'Táctica',aspectos:[['tac1','Toma de decisiones'],['tac2','Visión de juego'],['tac3','Desmarques'],['tac14','Tercer hombre'],['tac15','Juego de pared'],['tac10','Ocupación de espacios'],['tac4','Posicionamiento defensivo'],['tac5','Presión tras pérdida'],['tac11','Repliegue'],['tac6','Comprensión del modelo de juego'],['tac7','Marcaje'],['tac8','Anticipación'],['tac12','Intercepciones'],['tac9','Entradas'],['tac13','Robo de balón']]},
+  {id:'pos',nombre:'Posicional',aspectos:[['pos1','Posicionamiento ofensivo'],['pos2','Mantiene su posición en el sistema'],['pos3','Recibe perfilado, de cara al juego'],['pos4','Control orientado'],['pos5','Mira antes de recibir'],['pos6','Perfil defensivo en el 1 contra 1'],['pos7','Pierna no dominante'],['pos8','Lateralidad: juega hacia ambos lados'],['pos9','Amplitud'],['pos12','Profundidad'],['pos10','Apoyos'],['pos13','Líneas de pase'],['pos11','Coberturas'],['pos14','Basculación']]},
+  {id:'fis',nombre:'Física',aspectos:[['fis1','Velocidad'],['fis5','Aceleración'],['fis2','Resistencia'],['fis3','Fuerza'],['fis4','Coordinación'],['fis9','Agilidad'],['fis7','Equilibrio'],['fis6','Salto'],['fis8','Potencia de tiro']]},
+  {id:'psi',nombre:'Psicológica',aspectos:[['psi1','Concentración'],['psi2','Competitividad'],['psi3','Confianza'],['psi4','Gestión del error'],['psi5','Compostura bajo presión'],['psi6','Reacciones'],['psi7','Agresividad'],['psi8','Intensidad']]},
+  {id:'soc',nombre:'Social',aspectos:[['soc1','Compañerismo'],['soc2','Comunicación'],['soc3','Actitud'],['soc5','Compromiso'],['soc4','Respeto a compañeros'],['soc6','Respeto a rivales'],['soc7','Respeto a árbitros']]}
+];
+S.evBy = {}; S.evSrc = {};
+function evMean(a){ var v = a.filter(function(x){ return typeof x === 'number'; }); return v.length ? v.reduce(function(s,x){ return s+x; },0)/v.length : null; }
+function evAreas(ev){ return EV_AREAS.map(function(a){ return ev ? evMean(a.aspectos.map(function(x){ return ev.notas ? ev.notas[x[0]] : null; })) : null; }); }
+function evOverall(ev){ return evMean(evAreas(ev)); }
+function evFmt(n){ return n == null ? '–' : (Math.round(n*10)/10).toFixed(1).replace('.',','); }
+function evLabel(v){ return v === 'na' ? 'N/A' : (typeof v === 'number' ? v : '–'); }
+function evFecha(s){ if(!s) return 'Sin fecha'; var m = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'], p = s.split('-'); return p.length === 3 ? (+p[2]) + ' ' + m[(+p[1])-1] + ' ' + p[0] : s; }
+function evMerge(){
+  var all = {}, src = {};
+  Object.keys(S.evBy).forEach(function(p){
+    var m = S.evBy[p] || {};
+    Object.keys(m).forEach(function(id){
+      var e = m[id], o = all[id];
+      if(!o || (o.copia && !e.copia) || (!!o.copia === !!e.copia && (e.act || 0) > (o.act || 0))){ all[id] = e; src[id] = p; }
+    });
+  });
+  S.evals = all; S.evSrc = src;
+}
+function evalsOf(tid, jid){
+  return Object.keys(S.evals || {}).map(function(k){ return S.evals[k]; }).filter(function(e){ return e.t === tid && e.j === jid; })
+    .sort(function(a,b){ return String(b.fecha||'').localeCompare(String(a.fecha||'')) || ((b.creado||0) - (a.creado||0)); });
+}
+function evWatch(p){
+  if(!S.db || SUBS[p]) return;
+  SUBS[p] = S.db.collection(p).onSnapshot(function(snap){
+    var m = {}; snap.docs.forEach(function(d){ m[d.id] = Object.assign({}, d.data(), {id:d.id}); });
+    S.evBy[p] = m; evMerge(); if(S.ready && S.view.name !== 'evaluar') softRender();
+  }, function(){});
+}
+function evCanEdit(e){
+  if(S.readOnly) return false;
+  if(!e) return true;
+  if(ME.owner) return true;
+  return !e.copia && S.evSrc[e.id] === 'cuentas/' + ME.uid + '/evaluaciones';
+}
+async function evSave(e){
+  e = JSON.parse(JSON.stringify(e)); e.act = Date.now(); delete e.copia;
+  if(!S.db){ (S.evBy.local = S.evBy.local || {})[e.id] = e; evMerge(); saveLocal(); return; }
+  var src = S.evSrc[e.id], path;
+  if(src && src.indexOf('cuentas/') === 0 && ME.owner && !(S.evals[e.id] || {}).copia) path = src;
+  else path = ME.owner ? 'privado/evaluaciones' : 'cuentas/' + ME.uid + '/evaluaciones';
+  await S.db.collection(path).doc(e.id).set(e);
+  (S.evBy[path] = S.evBy[path] || {})[e.id] = e;
+  if(ME.owner && path === 'privado/evaluaciones'){
+    var cs = coachesOf(e.t), cp = Object.assign({}, e, {copia:1});
+    for(var i = 0; i < cs.length; i++){ var pc = 'cuentas/' + cs[i] + '/evaluaciones'; await S.db.collection(pc).doc(e.id).set(cp); (S.evBy[pc] = S.evBy[pc] || {})[e.id] = cp; }
+  }
+  evMerge();
+}
+async function evDelete(id){
+  if(!S.db){ if(S.evBy.local) delete S.evBy.local[id]; evMerge(); saveLocal(); return; }
+  var paths = Object.keys(S.evBy).filter(function(p){ return S.evBy[p] && S.evBy[p][id]; });
+  if(!ME.owner) paths = paths.filter(function(p){ return p === 'cuentas/' + ME.uid + '/evaluaciones'; });
+  for(var i = 0; i < paths.length; i++){ await S.db.collection(paths[i]).doc(id).delete(); delete S.evBy[paths[i]][id]; }
+  evMerge();
+}
+function evRadar(vals, prev){
+  var n = vals.length, cx = 180, cy = 140, R = 96, out = '';
+  function pt(i, v){ var a = -Math.PI/2 + i*2*Math.PI/n, r = R*(v||0)/10; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
+  function poly(vs){ return vs.map(function(v,i){ var p = pt(i, v); return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' '); }
+  [2,4,6,8,10].forEach(function(k){ out += '<polygon points="'+poly(vals.map(function(){ return k; }))+'" fill="none" stroke="rgba(14,27,61,'+(k===10?.45:.18)+')" stroke-width="1"/>'; });
+  vals.forEach(function(_,i){ var p = pt(i,10); out += '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="rgba(14,27,61,.18)"/>'; });
+  if(prev && prev.some(function(v){ return v != null; })) out += '<polygon points="'+poly(prev)+'" fill="none" stroke="var(--navy)" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  out += '<polygon points="'+poly(vals)+'" fill="var(--gold)" fill-opacity=".55" stroke="var(--gold-deep)" stroke-width="2.5" stroke-linejoin="round"/>';
+  vals.forEach(function(v,i){
+    if(v != null){ var p = pt(i,v); out += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--gold-deep)"/>'; }
+    var a = -Math.PI/2 + i*2*Math.PI/n, c = Math.cos(a), s = Math.sin(a);
+    var lx = cx + (R+14)*c, ly = cy + (R+14)*s + (s < -0.5 ? -14 : s > 0.5 ? 14 : -2);
+    var anchor = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle';
+    out += '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="'+anchor+'" font-size="13" font-weight="600" fill="var(--muted)">'+esc(EV_AREAS[i].nombre)+'</text>';
+    out += '<text x="'+lx.toFixed(1)+'" y="'+(ly+16).toFixed(1)+'" text-anchor="'+anchor+'" font-size="16" font-weight="700" fill="var(--ink)">'+evFmt(v)+'</text>';
+  });
+  return '<svg class="radar" viewBox="0 0 360 290" role="img" aria-label="Perfil por áreas: '+esc(EV_AREAS.map(function(a,i){ return a.nombre+' '+evFmt(vals[i]); }).join(', '))+'">'+out+'</svg>';
+}
+function evBars(vals){ return '<span class="pbars" aria-hidden="true">'+vals.map(function(v){ return v == null ? '<i class="nil"></i>' : '<i style="height:'+Math.max(2, Math.round(v*3))+'px"></i>'; }).join('')+'</span>'; }
+function evPlayer(tid, jid){ return plantilla(tid).filter(function(j){ return j.id === jid; })[0]; }
+
+/* Tarjeta en la pantalla del equipo */
+function evCard(t){
+  var pl = plantilla(t.id);
+  var h = '<details class="card ev" style="margin-top:14px"' + keepD('ev-' + t.id) + '><summary><b style="font:600 18px/1 var(--display)">Evaluación individual (0 a 10)</b> <span class="note">' + pl.filter(function(j){ return evalsOf(t.id, j.id).length; }).length + ' de ' + pl.length + ' evaluados</span></summary>';
+  if(!pl.length) return h + '<p class="note">Añade primero la plantilla del equipo.</p></details>';
+  h += '<ul class="plist">' + pl.slice().sort(function(a,b){ return (+a.d || 999) - (+b.d || 999) || String(a.n).localeCompare(String(b.n), 'es'); }).map(function(j){
+    var ev = evalsOf(t.id, j.id)[0];
+    return '<li><button type="button" class="prow" data-ev="ver" data-t="' + t.id + '" data-j="' + esc(j.id) + '"><span class="pnum">' + esc(j.d || '–') + '</span><span><span class="pname">' + esc(j.n) + '</span><span class="psub">' + (j.pt ? 'Portero · ' : '') + (ev ? 'Última: ' + evFecha(ev.fecha) : 'Sin evaluar') + '</span></span>' + evBars(evAreas(ev)) + '<span class="pavg">' + evFmt(evOverall(ev)) + '</span></button></li>';
+  }).join('') + '</ul>';
+  h += '<div class="row"><button type="button" class="btn ghost small" data-ev="tabla" data-t="' + t.id + '">Tabla del equipo</button></div>';
+  return h + '</details>';
+}
+
+/* Ficha del jugador */
+function vEvJugador(){
+  var v = S.view, t = team(v.t), j = evPlayer(v.t, v.j);
+  if(!t || !j){ S.view = {name:'home'}; return vHome(); }
+  var evs = evalsOf(v.t, v.j), ev = evs.filter(function(e){ return e.id === v.evId; })[0] || evs[0];
+  var prev = ev ? evs[evs.indexOf(ev)+1] : null, am = evAreas(ev), pm = prev ? evAreas(prev) : null;
+  var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="volver">‹ Volver</button><span class="ttl">' + esc(t.n) + ' · Evaluación</span></div></div><main class="inner ev"><div class="evgrid"><div>';
+  h += '<section class="cromo"><div class="cromo-top">' + (j.d ? '<span class="dorsal" aria-label="Dorsal ' + esc(j.d) + '">' + esc(j.d) + '</span>' : '') +
+    '<div class="cromo-id"><h2>' + esc(j.n) + '</h2><p>' + esc([t.n, j.pt ? 'Portero' : ''].filter(Boolean).join(' · ')) + '</p></div><div class="media"><b>' + evFmt(evOverall(ev)) + '</b><span>Media</span></div></div>';
+  h += evRadar(am, pm);
+  if(ev) h += '<div class="legend"><span><i></i>' + evFecha(ev.fecha) + '</span>' + (prev ? '<span><i class="prev"></i>' + evFecha(prev.fecha) + '</span>' : '') + '</div>';
+  h += '</section>';
+  if(!S.readOnly) h += '<div class="row" style="margin:14px 0"><button type="button" class="btn" data-ev="nueva">Nueva evaluación</button></div>';
+  h += '</div><div>';
+  if(!ev) h += '<div class="empty" style="margin-top:0"><strong>Sin evaluaciones todavía</strong>Crea la primera para ver su perfil por áreas.</div>';
+  else {
+    h += '<section class="card"><h3 class="evh">Áreas</h3>';
+    EV_AREAS.forEach(function(a,i){
+      var d = (pm && am[i] != null && pm[i] != null) ? am[i]-pm[i] : null;
+      var dt = d == null ? '' : (Math.abs(d) < 0.05 ? '=' : (d > 0 ? '+' : '−') + evFmt(Math.abs(d)));
+      h += '<div class="abar"><span class="nm">' + esc(a.nombre) + '</span><span class="track"><i style="width:' + ((am[i]||0)*10) + '%"></i></span><span class="v">' + evFmt(am[i]) + '</span><span class="d">' + dt + '</span></div>';
+    });
+    EV_AREAS.forEach(function(a){
+      h += '<details class="evd"><summary>' + esc(a.nombre) + ' al detalle <span>' + a.aspectos.length + ' aspectos</span></summary>' + a.aspectos.map(function(x){
+        var val = ev.notas ? ev.notas[x[0]] : null;
+        return '<div class="asprow"><span>' + esc(x[1]) + '</span><span class="track"><i style="width:' + ((typeof val === 'number' ? val : 0)*10) + '%"></i></span><b>' + evLabel(val) + '</b></div>';
+      }).join('') + '<div style="height:10px"></div></details>';
+    });
+    h += '</section>';
+    if(ev.fortalezas || ev.mejorar || ev.objetivo) h += '<section class="card obs" style="margin-top:14px"><h3 class="evh">Observaciones</h3>' + (ev.fortalezas ? '<p><b>Puntos fuertes</b>' + esc(ev.fortalezas) + '</p>' : '') + (ev.mejorar ? '<p><b>A mejorar</b>' + esc(ev.mejorar) + '</p>' : '') + (ev.objetivo ? '<p><b>Objetivo</b>' + esc(ev.objetivo) + '</p>' : '') + '</section>';
+    h += '<section class="card" style="margin-top:14px"><h3 class="evh">Evaluaciones guardadas</h3><ul class="hist">' + evs.map(function(e){
+      var ed = evCanEdit(e);
+      return '<li><button type="button" class="sel" data-ev="pick" data-id="' + esc(e.id) + '" aria-current="' + (e === ev) + '">' + evFecha(e.fecha) + (e.autorN ? ' · ' + esc(e.autorN) : '') + '</button><span class="hv">' + evFmt(evOverall(e)) + '</span>' +
+        (ed ? '<button type="button" class="linkbtn" data-ev="editar" data-id="' + esc(e.id) + '">Editar</button><button type="button" class="linkbtn danger" data-ev="borrar" data-id="' + esc(e.id) + '">' + (S.evConfirm === e.id ? 'Confirmar' : 'Eliminar') + '</button>' : '') + '</li>';
+    }).join('') + '</ul></section>';
+  }
+  return h + '</div></div></main>';
+}
+
+/* Formulario de evaluación */
+function vEvaluar(){
+  var d = S.view.d, t = team(d.t), j = evPlayer(d.t, d.j) || {n:''};
+  var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="cancelar">‹ Cancelar</button><span class="ttl">' + esc(j.n) + '</span></div></div><main class="inner ev" style="padding-bottom:120px">';
+  h += '<div class="field" style="margin-top:16px;max-width:260px"><label for="ev-fecha">Fecha de la evaluación</label><input id="ev-fecha" type="date" data-evf="fecha" value="' + esc(d.fecha) + '"></div>';
+  h += '<p class="note">' + (d.prefill ? 'Parte de las notas de su última evaluación: cambia solo lo que haya variado. ' : 'Toca una nota del 0 al 10. ') + 'Lo que marques como «No aplica» o dejes sin valorar no cuenta en las medias.</p>';
+  var am = evAreas(d);
+  EV_AREAS.forEach(function(a,i){
+    h += '<section class="area"><div class="area-head"><h3>' + esc(a.nombre) + '</h3><span data-area-mean="' + i + '">' + evFmt(am[i]) + '</span></div>';
+    a.aspectos.forEach(function(x){
+      var v = d.notas[x[0]], segs = '';
+      for(var n = 0; n <= 10; n++) segs += '<button type="button" role="radio" class="seg' + (typeof v === 'number' && n <= v ? ' on' : '') + (v === n ? ' cur' : '') + '" aria-checked="' + (v === n) + '" aria-label="' + n + '" data-ev="nota" data-asp="' + x[0] + '" data-n="' + n + '">' + n + '</button>';
+      h += '<div class="asp" data-asp-row="' + x[0] + '"><div class="asp-head"><span class="asp-name">' + esc(x[1]) + '</span><button type="button" class="na" data-ev="na" data-asp="' + x[0] + '" aria-pressed="' + (v === 'na') + '">No aplica</button><span class="asp-val">' + evLabel(v) + '</span></div><div class="segs" role="radiogroup" aria-label="' + esc(x[1]) + '">' + segs + '</div></div>';
+    });
+    h += '</section>';
+  });
+  h += '<div style="margin-top:24px;display:grid;gap:12px">' +
+    '<div class="field"><label for="ev-fo">Puntos fuertes</label><textarea id="ev-fo" rows="3" data-evf="fortalezas">' + esc(d.fortalezas) + '</textarea></div>' +
+    '<div class="field"><label for="ev-me">A mejorar</label><textarea id="ev-me" rows="3" data-evf="mejorar">' + esc(d.mejorar) + '</textarea></div>' +
+    '<div class="field"><label for="ev-ob">Objetivo para el próximo periodo</label><textarea id="ev-ob" rows="3" data-evf="objetivo">' + esc(d.objetivo) + '</textarea></div></div>';
+  h += '</main><div class="savebar"><div class="inner"><button type="button" class="btn navy" style="width:100%" data-ev="guardar"' + (S.evBusy ? ' disabled' : '') + '>Guardar evaluación</button></div></div>';
+  return h;
+}
+function evPaintRow(asp){
+  var d = S.view.d, row = document.querySelector('[data-asp-row="' + asp + '"]'); if(!row) return render();
+  var v = d.notas[asp];
+  row.querySelectorAll('.seg').forEach(function(b){ var n = +b.dataset.n; b.classList.toggle('on', typeof v === 'number' && n <= v); b.classList.toggle('cur', v === n); b.setAttribute('aria-checked', String(v === n)); });
+  row.querySelector('.na').setAttribute('aria-pressed', String(v === 'na'));
+  row.querySelector('.asp-val').textContent = evLabel(v);
+  var am = evAreas(d); document.querySelectorAll('[data-area-mean]').forEach(function(el){ el.textContent = evFmt(am[+el.dataset.areaMean]); });
+}
+
+/* Tabla del equipo */
+function vEvTabla(){
+  var t = team(S.view.t); if(!t){ S.view = {name:'home'}; return vHome(); }
+  var rows = plantilla(t.id).map(function(j){ var ev = evalsOf(t.id, j.id)[0]; return {j:j, am:evAreas(ev), ov:evOverall(ev)}; })
+    .filter(function(r){ return r.ov != null; }).sort(function(a,b){ return b.ov - a.ov; });
+  var h = '<div class="subbar"><div class="inner"><button type="button" data-ev="volverHome">‹ Volver</button><span class="ttl">' + esc(t.n) + ' · Tabla del equipo</span></div></div><main class="inner ev">';
+  if(!rows.length) return h + '<div class="empty"><strong>Aún no hay nada que comparar</strong>Cuando evalúes a los jugadores, aquí verás la tabla del equipo con la media de cada área.</div></main>';
+  h += '<div class="scroll evt"><table><thead><tr><th scope="col">Jugador</th>' + EV_AREAS.map(function(a){ return '<th scope="col"><abbr title="' + esc(a.nombre) + '" style="text-decoration:none">' + esc(a.nombre.slice(0,3)) + '.</abbr></th>'; }).join('') + '<th scope="col">Media</th></tr></thead><tbody>';
+  rows.forEach(function(r){ h += '<tr><td><small>' + esc(r.j.d || '') + '</small>' + esc(r.j.n) + '</td>' + r.am.map(function(v){ return '<td>' + evFmt(v) + '</td>'; }).join('') + '<td>' + evFmt(r.ov) + '</td></tr>'; });
+  h += '</tbody><tfoot><tr><td>Media del equipo</td>' + EV_AREAS.map(function(_,i){ return '<td>' + evFmt(evMean(rows.map(function(r){ return r.am[i]; }))) + '</td>'; }).join('') + '<td>' + evFmt(evMean(rows.map(function(r){ return r.ov; }))) + '</td></tr></tfoot></table></div>';
+  return h + '<p class="note">Se usa la última evaluación de cada jugador, ordenados de mayor a menor media.</p></main>';
+}
+
+/* Pegar la plantilla de una vez */
+function evParseLista(txt){
+  var out = [];
+  String(txt || '').split(/\r?\n/).forEach(function(l){
+    l = l.replace(/^\s*[-•*·]\s*/, '').trim(); if(!l) return;
+    var pt = /\b(portero|portera|guardameta|POR)\b|\((P|POR)\)/i.test(l);
+    l = l.replace(/[,;(\-–]*\s*\b(portero|portera|guardameta)\b\s*\)?/ig, ' ').replace(/\((P|POR)\)/ig, ' ');
+    var m = l.match(/^\s*(\d{1,2})\s*[.)\-–:\t ]\s*(.+)$/), d = '', n = l;
+    if(m){ d = m[1]; n = m[2]; }
+    else { var m2 = l.match(/^(.+?)[\t ,;]+(\d{1,2})\s*$/); if(m2){ n = m2[1]; d = m2[2]; } }
+    n = n.replace(/[\t,;]+/g, ' ').replace(/\s+/g, ' ').trim();
+    if(n.length < 2 || /^(dorsal|nombre|jugador)/i.test(n)) return;
+    out.push({n:n, d:d, pt:pt});
+  });
+  return out;
+}
+function evNorm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim(); }
+function pasteHtml(t){
+  if(S.readOnly) return '';
+  return '<details class="paste" style="margin-top:12px"' + keepD('pp-' + t.id) + '><summary class="btn ghost small" style="display:inline-flex">Pegar la lista completa</summary>' +
+    '<div class="field" style="margin-top:10px"><label for="pl-' + t.id + '">Un jugador por línea: dorsal y nombre. Si es portero, añade «portero» al final.</label><textarea id="pl-' + t.id + '" rows="8" placeholder="1 Nombre Apellido Apellido portero&#10;2 Nombre Apellido Apellido&#10;Nombre sin dorsal"></textarea></div>' +
+    '<p class="note">Los que ya estén en la plantilla (mismo nombre) se actualizan; los nuevos se añaden. No se quita a nadie.</p>' +
+    '<button type="button" class="btn small" data-ev="pegar" data-t="' + t.id + '">Añadir a la plantilla</button></details>';
+}
+
+app.addEventListener('click', async function(ev){
+  var b = ev.target.closest('[data-ev]'); if(!b) return;
+  var k = b.dataset.ev, v = S.view;
+  if(k === 'ver'){ go({name:'evjug', t:b.dataset.t, j:b.dataset.j}); }
+  else if(k === 'tabla'){ go({name:'evtabla', t:b.dataset.t}); }
+  else if(k === 'volver' || k === 'volverHome'){ go({name:'home'}); }
+  else if(k === 'pick'){ v.evId = b.dataset.id; stay(); }
+  else if(k === 'nueva' || k === 'editar'){
+    var base, d;
+    if(k === 'editar'){ base = S.evals[b.dataset.id]; d = JSON.parse(JSON.stringify(base)); delete d.copia; }
+    else {
+      base = evalsOf(v.t, v.j)[0];
+      d = {id:'ev-' + uid(), t:v.t, j:v.j, fecha:today(), notas:base ? JSON.parse(JSON.stringify(base.notas || {})) : {}, fortalezas:'', mejorar:'', objetivo:'', creado:Date.now(), prefill:!!base};
+    }
+    S.evBack = {t:v.t, j:v.j}; go({name:'evaluar', d:d});
+  }
+  else if(k === 'cancelar'){ go({name:'evjug', t:S.evBack.t, j:S.evBack.j}); }
+  else if(k === 'nota'){ v.d.notas[b.dataset.asp] = +b.dataset.n; evPaintRow(b.dataset.asp); }
+  else if(k === 'na'){ var a = b.dataset.asp; if(v.d.notas[a] === 'na') delete v.d.notas[a]; else v.d.notas[a] = 'na'; evPaintRow(a); }
+  else if(k === 'guardar'){
+    var e = Object.assign({}, v.d); delete e.prefill;
+    if(!e.fecha){ toast('Pon la fecha de la evaluación.'); return; }
+    e.autor = e.autor || ME.uid || ''; e.autorN = e.autorN || (ME.owner ? 'Coordinación' : ((typeof CUENTA !== 'undefined' && CUENTA && CUENTA.nombre) || S.names[ME.uid] || ''));
+    S.evBusy = true; stay();
+    try{ await evSave(e); S.evBusy = false; toast('Evaluación guardada'); go({name:'evjug', t:e.t, j:e.j, evId:e.id}); }
+    catch(err){ S.evBusy = false; stay(); toast(err && err.code === 'invalid_argument' ? 'Tu acceso es de solo lectura: no se ha guardado.' : 'No se ha podido guardar. Comprueba la conexión.'); }
+  }
+  else if(k === 'borrar'){
+    var id = b.dataset.id;
+    if(S.evConfirm !== id){ S.evConfirm = id; stay(); return; }
+    S.evConfirm = null;
+    try{ await evDelete(id); if(v.evId === id) v.evId = null; stay(); toast('Evaluación eliminada'); }catch(err){ toast('No se ha podido eliminar.'); }
+  }
+  else if(k === 'pegar'){
+    var tid = b.dataset.t, ta = document.getElementById('pl-' + tid), lista = evParseLista(ta && ta.value);
+    if(!lista.length){ toast('No he encontrado jugadores en el texto.'); return; }
+    var nuevos = 0, cambiados = 0;
+    editRoster(tid, function(l){
+      lista.forEach(function(x){
+        var o = l.filter(function(j){ return evNorm(j.n) === evNorm(x.n); })[0];
+        if(o){ if(x.d && o.d !== x.d){ o.d = x.d; cambiados++; } if(x.pt && !o.pt){ o.pt = true; cambiados++; } }
+        else { l.push({id:'j-' + tid + '-' + uid(), n:x.n, d:x.d, pt:x.pt}); nuevos++; }
+      });
+      return l;
+    });
+    S.keepD = S.keepD || {}; S.keepD['pp-' + tid] = false; S.keepD['pl-' + tid] = true;
+    stay(); await saveRoster();
+    toast((nuevos === 1 ? '1 jugador añadido' : nuevos + ' jugadores añadidos') + (cambiados ? ' y ' + (cambiados === 1 ? '1 dato actualizado' : cambiados + ' datos actualizados') : ''));
+  }
+});
+app.addEventListener('input', function(ev){
+  var t = ev.target; if(!t.dataset || !t.dataset.evf || S.view.name !== 'evaluar') return;
+  S.view.d[t.dataset.evf] = t.value;
+});
+function keepD(k){ S.keepD = S.keepD || {}; return ' data-keep="' + k + '"' + (S.keepD[k] ? ' open' : ''); }
+app.addEventListener('toggle', function(ev){
+  var t = ev.target; if(t.dataset && t.dataset.keep){ S.keepD = S.keepD || {}; S.keepD[t.dataset.keep] = t.open; }
+}, true);
 
 /* ================= VISTAS ================= */
 function band(){
@@ -1679,6 +2027,7 @@ function vHome(){
     }).join('') + '</ul>';
   }
   h += rosterHtml(t);
+  h += evCard(t);
   h += vPropTeam(t);
   if(!S.readOnly) h += '<div class="card" style="margin-top:14px"><div class="row"><div class="field" style="flex:1;min-width:180px"><label for="nd">Sesión para otro día</label><input id="nd" type="date" value="'+esc(addDays(S.week, 0))+'"></div><button type="button" class="btn ghost" data-act="newDay" data-t="'+t.id+'" style="align-self:end">Crear borrador</button></div></div>';
   return h + '</main>';
@@ -1854,7 +2203,10 @@ function render(){
   if(S.view.name === 'session'){
     var s = S.view.s; if(s && S.sessions[s.id] && S.sessions[s.id] !== s && !s.dirty && (S.sessions[s.id].actualizado || 0) > (s.actualizado || 0)) S.view.s = JSON.parse(JSON.stringify(S.sessions[s.id]));
     app.innerHTML = vSession();
-  } else app.innerHTML = vHome();
+  } else if(S.view.name === 'evjug') app.innerHTML = vEvJugador();
+  else if(S.view.name === 'evaluar') app.innerHTML = vEvaluar();
+  else if(S.view.name === 'evtabla') app.innerHTML = vEvTabla();
+  else app.innerHTML = vHome();
   if(S.keepOpen){ var dd = document.querySelector('#t-' + S.keepOpen + ' .plan details'); if(dd) dd.open = true; S.keepOpen = null; }
   if(S.keepScroll){ window.scrollTo(0, y); S.keepScroll = false; }
 }
