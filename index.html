@@ -2383,9 +2383,9 @@ function vMesos(){
   if(!MESOS.length) return '<div class="section-h"><h2>Mesociclos de la temporada</h2></div><div class="empty"><strong>Sin programación</strong>Este club todavía no tiene mesociclos.</div>';
   var hoy = today();
   return '<div class="section-h"><h2>Mesociclos de la temporada</h2><span>' + (S.mesosGeneral ? 'Programación general de Metodix' : 'Programación propia del club') + '</span></div>' +
-    '<div class="scroll"><table><thead><tr><th>Mesociclo</th><th>Fechas</th><th>Principio</th><th>Secundario</th><th>Contenido</th></tr></thead><tbody>' + MESOS.map(function(m){
+    '<div class="scroll"><table><thead><tr><th>Mesociclo</th><th>Fechas</th><th>Principio principal</th><th>Secundario</th></tr></thead><tbody>' + MESOS.map(function(m){
       var ya = hoy >= m.ini && hoy <= m.fin;
-      return '<tr' + (ya ? ' style="background:var(--gold-soft,#F6EDCC)"' : '') + '><td><b>' + esc(m.id) + '</b>' + (ya ? ' <span class="pill gold">Ahora</span>' : '') + '</td><td>' + esc(fdate(m.ini, 'short')) + ' – ' + esc(fdate(m.fin, 'short')) + '</td><td>' + esc(PR[m.p] || m.p || '') + '</td><td>' + esc(m.sp ? (PR[m.sp] || m.sp) : '–') + '</td><td>' + esc(m.s || '') + '</td></tr>';
+      return '<tr' + (ya ? ' style="background:var(--gold-soft,#F6EDCC)"' : '') + '><td><b>' + esc(m.id) + '</b>' + (ya ? ' <span class="pill gold">Ahora</span>' : '') + '</td><td>' + esc(fdate(m.ini, 'short')) + ' – ' + esc(fdate(m.fin, 'short')) + '</td><td>' + esc(PR[m.p] || m.p || '') + '</td><td>' + esc(m.s || (m.sp ? (PR[m.sp] || m.sp) : '–')) + '</td></tr>';
     }).join('') + '</tbody></table></div>';
 }
 function vCoord(){
