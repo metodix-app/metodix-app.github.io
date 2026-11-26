@@ -2379,6 +2379,15 @@ async function darEquipo(u, tid){
     for(var i = 0; i < ids.length; i++) await S.db.collection(sesCol(u)).doc(ids[i]).set(clean(S.sessions[ids[i]]));
   }catch(e){ toast('El acceso está dado, pero no se han podido copiar todas las sesiones.'); }
 }
+function vMesos(){
+  if(!MESOS.length) return '<div class="section-h"><h2>Mesociclos de la temporada</h2></div><div class="empty"><strong>Sin programación</strong>Este club todavía no tiene mesociclos.</div>';
+  var hoy = today();
+  return '<div class="section-h"><h2>Mesociclos de la temporada</h2><span>' + (S.mesosGeneral ? 'Programación general de Metodix' : 'Programación propia del club') + '</span></div>' +
+    '<div class="scroll"><table><thead><tr><th>Mesociclo</th><th>Fechas</th><th>Principio</th><th>Secundario</th><th>Contenido</th></tr></thead><tbody>' + MESOS.map(function(m){
+      var ya = hoy >= m.ini && hoy <= m.fin;
+      return '<tr' + (ya ? ' style="background:var(--gold-soft,#F6EDCC)"' : '') + '><td><b>' + esc(m.id) + '</b>' + (ya ? ' <span class="pill gold">Ahora</span>' : '') + '</td><td>' + esc(fdate(m.ini, 'short')) + ' – ' + esc(fdate(m.fin, 'short')) + '</td><td>' + esc(PR[m.p] || m.p || '') + '</td><td>' + esc(m.sp ? (PR[m.sp] || m.sp) : '–') + '</td><td>' + esc(m.s || '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
 function vCoord(){
   var h = vAccesos() + weekNav(), end = addDays(S.week, 6), rows = [], low = [], high = [], pendientes = [];
   TEAMS.forEach(function(t){
@@ -2397,6 +2406,7 @@ function vCoord(){
   if(pendientes.length) h += '<div class="section-h"><h2>Por confirmar</h2><span>'+pendientes.length+' sesiones</span></div><ul class="list">'+pendientes.map(function(s){ return '<li><button type="button" class="item" data-act="open" data-t="'+s.equipo+'" data-f="'+s.fecha+'"><span class="date">'+fdate(s.fecha,'day')+'<small>'+fdate(s.fecha,'mon')+'</small></span><span><span class="iname">'+esc(team(s.equipo).n)+' · '+esc(PR[s.pr])+'</span><span class="tags">'+statusPills(s)+'</span></span><span aria-hidden="true">›</span></button></li>'; }).join('')+'</ul>';
   h += '<div class="grid2"><div class="card"><h3 style="font:700 20px/1.1 var(--display);margin-bottom:6px">Ejercicios que no han funcionado (1-2)</h3>'+(low.length ? '<ul style="margin:0;padding-left:18px">'+low.slice(0,12).map(function(a){ return '<li>'+esc(a[1].nombre)+' · '+esc(team(a[0].equipo).n)+', '+fdate(a[0].fecha,'short')+(a[1].valObs ? ' — '+esc(a[1].valObs) : '')+'</li>'; }).join('')+'</ul>' : '<p class="note">Ninguno todavía.</p>')+'</div>' +
     '<div class="card"><h3 style="font:700 20px/1.1 var(--display);margin-bottom:6px">Ejercicios para el banco del club (4-5)</h3>'+(high.length ? '<ul style="margin:0;padding-left:18px">'+high.slice(0,12).map(function(a){ return '<li>'+esc(a[1].nombre)+' · '+esc(team(a[0].equipo).n)+' ('+a[1].val+'/5)</li>'; }).join('')+'</ul>' : '<p class="note">Ninguno todavía.</p>')+'</div></div>';
+  h += vMesos();
   h += '<div class="section-h"><h2>Días de entrenamiento</h2><span>Los borradores salen de estos días</span></div><div class="card" style="display:grid;gap:12px">';
   TEAMS.forEach(function(t){
     var d = teamDays(t);
