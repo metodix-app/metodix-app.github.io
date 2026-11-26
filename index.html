@@ -602,9 +602,10 @@ function makeDraft0(tid, f, tipo){
   if(tipo === 'pre'){ objs.push('Ensayar las acciones a balón parado a favor y en contra.'); objs.push('Aplicar lo trabajado en situación de partido con menos volumen.'); }
   return {id: tid + '_' + f, equipo:tid, fecha:f, meso:m.id, pr:m.p, prTarea:pm, prSec:psec, tipo:tipo, objs:objs, paron:mi.paron, estado:'borrador', tareas:tareas, virtual:true, v:EST_V, creado:Date.now()};
 }
-function sessionFor(tid, f){ return S.sessions[tid + '_' + f] || makeDraft(tid, f); }
+function sessionFor(tid, f){ return S.sessions[tid + '_' + f] || (sinPlan() ? null : makeDraft(tid, f)); }
+function sinPlan(){ return !MESOS.length; }
 function weekDates(tid, mon){
-  var t = team(tid), days = daysOn(t, mon), out = [];
+  var t = team(tid), days = sinPlan() ? [] : daysOn(t, mon), out = [];
   for(var i = 0; i < 7; i++){ var f = addDays(mon, i), dow = pdate(f).getDay(); if(days.indexOf(dow) >= 0) out.push(f); }
   Object.keys(S.sessions).forEach(function(id){ var s = S.sessions[id]; if(s.equipo === tid && s.fecha >= mon && s.fecha <= addDays(mon, 6) && out.indexOf(s.fecha) < 0) out.push(s.fecha); });
   return out.sort();
@@ -1540,8 +1541,8 @@ async function cargaClub(){
   var r2 = await SB.from('config_general').select('data').eq('id', 'general').maybeSingle();
   var cfg = (r1.data && r1.data.data) || {}, gen = (r2.data && r2.data.data) || {};
   TEAMS = (cfg.teams && cfg.teams.length) ? cfg.teams : (gen.teams || []);
-  MESOS = (cfg.mesos && cfg.mesos.length) ? cfg.mesos : (gen.mesos || []);
-  S.mesosGeneral = !(cfg.mesos && cfg.mesos.length);
+  MESOS = (cfg.mesos && cfg.mesos.length) ? cfg.mesos : [];
+  S.cfgClub = cfg; S.mesosGen = gen.mesos || [];
   var rows = [], from = 0;
   for(;;){
     var r = await SB.from('ejercicios').select('id,club_id,grupo,orden,estado,propuesta,data').order('orden').order('created_at').range(from, from + 999);
@@ -2235,6 +2236,11 @@ function vHome(){
   var t = team(S.role);
   h += weekNav();
   var days = teamDays(t), list = weekDates(t.id, S.week);
+  if(sinPlan()){
+    h += '<div class="section-h"><h2>'+esc(t.n)+'</h2><span>'+ETAPAS[t.e]+'</span></div>';
+    h += vPartidosEquipo(t) + rosterHtml(t) + evCard(t) + vNuevoPartido(t) + vPropTeam(t);
+    return h + '</main>';
+  }
   if(!days.length && !list.length){
     h += '<div class="empty"><strong>Faltan los días de entrenamiento</strong>Este equipo todavía no tiene días configurados. Coordinación puede añadirlos, o crea una sesión para un día concreto.</div>';
   }
@@ -2379,17 +2385,59 @@ async function darEquipo(u, tid){
     for(var i = 0; i < ids.length; i++) await S.db.collection(sesCol(u)).doc(ids[i]).set(clean(S.sessions[ids[i]]));
   }catch(e){ toast('El acceso está dado, pero no se han podido copiar todas las sesiones.'); }
 }
+var PLAN_ED = null;
 function vMesos(){
-  if(!MESOS.length) return '<div class="section-h"><h2>Mesociclos de la temporada</h2></div><div class="empty"><strong>Sin programación</strong>Este club todavía no tiene mesociclos.</div>';
-  var hoy = today();
-  return '<div class="section-h"><h2>Mesociclos de la temporada</h2><span>' + (S.mesosGeneral ? 'Programación general de Metodix' : 'Programación propia del club') + '</span></div>' +
-    '<div class="scroll"><table><thead><tr><th>Mesociclo</th><th>Fechas</th><th>Principio principal</th><th>Secundario</th></tr></thead><tbody>' + MESOS.map(function(m){
+  var lista = PLAN_ED || MESOS, ed = !!PLAN_ED, opt = function(v, vacio){ return (vacio ? '<option value="">—</option>' : '') + Object.keys(PR).map(function(k){ return '<option value="' + k + '"' + (v === k ? ' selected' : '') + '>' + esc(PR[k]) + '</option>'; }).join(''); };
+  var h = '<div class="section-h"><h2>Planificación de la metodología</h2><span>Mesociclos del club</span></div>';
+  if(!ed){
+    if(!lista.length) return h + '<div class="empty"><strong>Todavía no hay planificación</strong>Mientras no la diseñes, los equipos solo muestran su categoría, partidos y plantilla, sin sesiones automáticas.<div class="row" style="justify-content:center;margin-top:10px"><button type="button" class="btn" data-pl="nueva">Diseñar la planificación</button>' + (S.mesosGen.length ? '<button type="button" class="btn ghost" data-pl="modelo">Partir del modelo de Metodix</button>' : '') + '</div></div>';
+    var hoy = today();
+    return h + '<div class="scroll"><table><thead><tr><th>Mesociclo</th><th>Fechas</th><th>Principio principal</th><th>Secundario</th><th>Contenido</th></tr></thead><tbody>' + lista.map(function(m){
       var ya = hoy >= m.ini && hoy <= m.fin;
-      return '<tr' + (ya ? ' style="background:var(--gold-soft,#F6EDCC)"' : '') + '><td><b>' + esc(m.id) + '</b>' + (ya ? ' <span class="pill gold">Ahora</span>' : '') + '</td><td>' + esc(fdate(m.ini, 'short')) + ' – ' + esc(fdate(m.fin, 'short')) + '</td><td>' + esc(PR[m.p] || m.p || '') + '</td><td>' + esc(m.s || (m.sp ? (PR[m.sp] || m.sp) : '–')) + '</td></tr>';
-    }).join('') + '</tbody></table></div>';
+      return '<tr' + (ya ? ' style="background:#F6EDCC"' : '') + '><td><b>' + esc(m.id) + '</b>' + (ya ? ' <span class="pill gold">Ahora</span>' : '') + '</td><td>' + esc(fdate(m.ini, 'short')) + ' – ' + esc(fdate(m.fin, 'short')) + '</td><td>' + esc(PR[m.p] || '') + '</td><td>' + esc(m.sp ? PR[m.sp] || '' : '–') + '</td><td>' + esc(m.s || '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>' + (S.readOnly ? '' : '<button type="button" class="btn ghost" data-pl="editar" style="margin-top:10px">Editar la planificación</button>');
+  }
+  h += '<div class="card" style="display:grid;gap:10px">' + lista.map(function(m, i){
+    return '<div class="pl-fila" data-i="' + i + '" style="display:grid;grid-template-columns:90px 1fr 1fr;gap:8px;padding-bottom:10px;border-bottom:1px dashed var(--line)">' +
+      '<div class="field"><label>Nombre</label><input class="pl-id" value="' + esc(m.id || '') + '"></div>' +
+      '<div class="field"><label>Inicio</label><input type="date" class="pl-ini" value="' + esc(m.ini || '') + '"></div>' +
+      '<div class="field"><label>Fin</label><input type="date" class="pl-fin" value="' + esc(m.fin || '') + '"></div>' +
+      '<div class="field" style="grid-column:1/3"><label>Principio principal</label><select class="pl-p">' + opt(m.p) + '</select></div>' +
+      '<div class="field"><label>Secundario</label><select class="pl-sp">' + opt(m.sp, true) + '</select></div>' +
+      '<div class="field" style="grid-column:1/3"><label>Contenido</label><input class="pl-s" value="' + esc(m.s || '') + '" placeholder="Qué se trabaja en este mesociclo"></div>' +
+      '<div style="align-self:end"><button type="button" class="btn danger small" data-pl="quitar" data-i="' + i + '">Quitar</button></div></div>';
+  }).join('') + '<div class="row"><button type="button" class="btn ghost" data-pl="anadir">Añadir mesociclo</button></div></div>' +
+    '<div class="row" style="margin-top:10px"><button type="button" class="btn" data-pl="guardar">Guardar planificación</button><button type="button" class="btn ghost" data-pl="cancelar">Cancelar</button></div>';
+  return h;
 }
+function leePlan(){
+  return [].map.call(document.querySelectorAll('.pl-fila'), function(r){
+    var g = function(c){ return r.querySelector(c).value.trim(); };
+    return {id: g('.pl-id'), ini: g('.pl-ini'), fin: g('.pl-fin'), p: g('.pl-p'), sp: g('.pl-sp') || null, s: g('.pl-s')};
+  });
+}
+document.addEventListener('click', async function(e){
+  var b = e.target.closest('[data-pl]'); if(!b) return;
+  var a = b.dataset.pl;
+  if(a === 'nueva'){ PLAN_ED = [{id: '1', ini: S.week, fin: addDays(S.week, 34), p: 'pm', sp: null, s: ''}]; return stay(); }
+  if(a === 'modelo'){ PLAN_ED = JSON.parse(JSON.stringify(S.mesosGen)); return stay(); }
+  if(a === 'editar'){ PLAN_ED = JSON.parse(JSON.stringify(MESOS)); return stay(); }
+  if(a === 'cancelar'){ PLAN_ED = null; return stay(); }
+  if(a === 'anadir'){ PLAN_ED = leePlan(); var u = PLAN_ED[PLAN_ED.length - 1], ini = u && u.fin ? addDays(u.fin, 1) : S.week; PLAN_ED.push({id: String(PLAN_ED.length + 1), ini: ini, fin: addDays(ini, 34), p: 'pm', sp: null, s: ''}); return stay(); }
+  if(a === 'quitar'){ PLAN_ED = leePlan(); PLAN_ED.splice(+b.dataset.i, 1); return stay(); }
+  if(a === 'guardar'){
+    var l = leePlan();
+    for(var i = 0; i < l.length; i++){ if(!l[i].id || !l[i].ini || !l[i].fin || l[i].fin < l[i].ini){ toast('Revisa el mesociclo ' + (i + 1) + ': falta el nombre o las fechas no cuadran.'); return; } }
+    l.sort(function(x, y){ return x.ini.localeCompare(y.ini); });
+    b.disabled = true;
+    try{
+      await S.db.doc('config/club').set(Object.assign({}, S.cfgClub || {}, {mesos: l}));
+      PLAN_ED = null; await cargaClub(); toast('Planificación guardada'); render();
+    }catch(err){ toast('No se ha podido guardar: ' + ((err && err.message) || '')); b.disabled = false; }
+  }
+});
 function vCoord(){
-  var h = vAccesos() + weekNav(), end = addDays(S.week, 6), rows = [], low = [], high = [], pendientes = [];
+  var h = vAccesos() + (sinPlan() || PLAN_ED ? vMesos() : '') + weekNav(), end = addDays(S.week, 6), rows = [], low = [], high = [], pendientes = [];
   TEAMS.forEach(function(t){
     var list = weekDates(t.id, S.week), conf = 0, tiempo = 0, val = 0, valTot = 0;
     list.forEach(function(f){
@@ -2406,7 +2454,7 @@ function vCoord(){
   if(pendientes.length) h += '<div class="section-h"><h2>Por confirmar</h2><span>'+pendientes.length+' sesiones</span></div><ul class="list">'+pendientes.map(function(s){ return '<li><button type="button" class="item" data-act="open" data-t="'+s.equipo+'" data-f="'+s.fecha+'"><span class="date">'+fdate(s.fecha,'day')+'<small>'+fdate(s.fecha,'mon')+'</small></span><span><span class="iname">'+esc(team(s.equipo).n)+' · '+esc(PR[s.pr])+'</span><span class="tags">'+statusPills(s)+'</span></span><span aria-hidden="true">›</span></button></li>'; }).join('')+'</ul>';
   h += '<div class="grid2"><div class="card"><h3 style="font:700 20px/1.1 var(--display);margin-bottom:6px">Ejercicios que no han funcionado (1-2)</h3>'+(low.length ? '<ul style="margin:0;padding-left:18px">'+low.slice(0,12).map(function(a){ return '<li>'+esc(a[1].nombre)+' · '+esc(team(a[0].equipo).n)+', '+fdate(a[0].fecha,'short')+(a[1].valObs ? ' — '+esc(a[1].valObs) : '')+'</li>'; }).join('')+'</ul>' : '<p class="note">Ninguno todavía.</p>')+'</div>' +
     '<div class="card"><h3 style="font:700 20px/1.1 var(--display);margin-bottom:6px">Ejercicios para el banco del club (4-5)</h3>'+(high.length ? '<ul style="margin:0;padding-left:18px">'+high.slice(0,12).map(function(a){ return '<li>'+esc(a[1].nombre)+' · '+esc(team(a[0].equipo).n)+' ('+a[1].val+'/5)</li>'; }).join('')+'</ul>' : '<p class="note">Ninguno todavía.</p>')+'</div></div>';
-  h += vMesos();
+  if(!(sinPlan() || PLAN_ED)) h += vMesos();
   h += '<div class="section-h"><h2>Días de entrenamiento</h2><span>Los borradores salen de estos días</span></div><div class="card" style="display:grid;gap:12px">';
   TEAMS.forEach(function(t){
     var d = teamDays(t);
