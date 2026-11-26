@@ -300,6 +300,35 @@ body.brand .banner{background:#F3F6FB;border-left-color:var(--sky)}
 .ev .evt tfoot td{border-top:2px solid var(--gold);background:var(--seg)}
 .paste summary{list-style:none;cursor:pointer}
 .paste summary::-webkit-details-marker{display:none}
+
+/* ===== Menú de usuario ===== */
+.um-av{width:40px;height:40px;border-radius:50%;border:2px solid var(--sky);background:var(--green);color:var(--on-green);font:700 15px/1 var(--display);letter-spacing:.5px;display:inline-grid;place-items:center;padding:0;vertical-align:middle}
+.um-av.big{width:48px;height:48px;font-size:18px;flex:none}
+.um-back{position:fixed;inset:0;z-index:70;background:rgba(14,27,61,.25)}
+.um-panel{position:fixed;top:12px;right:12px;z-index:71;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px rgba(14,27,61,.25);padding:6px 16px}
+.um-sec{padding:12px 0;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.um-sec:last-child{border-bottom:0}
+.um-h{font:700 13px/1 var(--display);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.um-club{display:flex;gap:10px;align-items:center;text-align:left;width:100%;background:transparent;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.um-club.on{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.um-club img,.um-sw{width:34px;height:34px;border-radius:8px;object-fit:contain;flex:none}
+.um-panel input{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface)}
+/* ===== Modo oscuro ===== */
+body.oscuro{--bg:#0F1522;--surface:#18202F;--ink:#E7ECF3;--muted:#A3AEC2;--line:#2C3648;--seg:#2C3648;--silver-soft:#1F2838;--navy:#C9D6EE;--red-soft:#3A1E22;--amber-soft:#3A2F17;color-scheme:dark;background:#0F1522}
+html:has(body.oscuro){background:#0F1522}
+body.oscuro .band,body.oscuro.brand .band{background:linear-gradient(115deg,#162033 0%,#1B2536 60%,#141C2B 100%)}
+body.oscuro .roles,body.oscuro .footbar{background:rgba(24,32,47,.92)}
+body.oscuro .subbar{background:#141C2B}
+body.oscuro .chip,body.oscuro .btn.ghost,body.oscuro .card,body.oscuro .item,body.oscuro .task,body.oscuro .empty,body.oscuro .alt,body.oscuro .val,body.oscuro .scroll{background:var(--surface);color:var(--ink)}
+body.oscuro input,body.oscuro select,body.oscuro textarea{background:#111827;color:var(--ink);border-color:var(--line)}
+body.oscuro th,body.oscuro .thead{background:#1F2838}
+body.oscuro .date{background:linear-gradient(160deg,#0B1220 0%,#1D2A44 100%)}
+body.oscuro .pill{background:#243047;color:var(--ink)}
+body.oscuro .pill.gold{background:#3A3216;color:#F2D27A}
+body.oscuro .banner{background:#1A2A3A}
+body.oscuro .note,body.oscuro .isub{color:var(--muted)}
+body.oscuro .band h1,body.oscuro .band .club{color:var(--ink)}
+body.oscuro img[src^="img/"]{filter:brightness(.92)}
 </style>
 </head>
 <body>
@@ -555,9 +584,11 @@ function makeDraft0(tid, f, tipo){
     if(!free.length) free = c;
     var k = count[sl[0]] = (count[sl[0]] || 0) + 1;
     var off = ({post:0, media:1, pre:2})[tipo] + Math.floor(pdate(f).getTime() / 604800000);
-    var b = free[(off + k - 1 + (sl[0] === 'act' || sl[0] === 'par' || sl[0] === 'cal' ? seed : 0)) % free.length]; used[b.id] = 1;
+    var b = free.length ? free[(off + k - 1 + (sl[0] === 'act' || sl[0] === 'par' || sl[0] === 'cal' ? seed : 0)) % free.length] : null;
+    if(!b) return null;
+    used[b.id] = 1;
     var x = fromBank(b, sl[0], sl[1], regla); if(pr) x.prin = pr; return x;
-  });
+  }).filter(Boolean);
   var objs = [];
   if(tipo === 'post') objs.push('Recuperar del esfuerzo del partido y corregir lo visto en él.');
   objs.push(OBJP[pm]);
@@ -1116,13 +1147,15 @@ function mezcla(hex, con, t){ var a = parseInt(hex.slice(1), 16), b = parseInt(c
   return '#' + ((1<<24) + (r<<16) + (g<<8) + bl).toString(16).slice(1); }
 function oscuro(hex){ var n = parseInt(hex.slice(1), 16); return (0.299*((n>>16)&255) + 0.587*((n>>8)&255) + 0.114*(n&255)) < 150; }
 function aplicaTema(c1, c2, stripe){
-  var r = document.documentElement.style;
-  r.setProperty('--green', c1); r.setProperty('--green-deep', mezcla(c1, '#000000', .2)); r.setProperty('--green-soft', mezcla(c1, '#ffffff', .88));
-  r.setProperty('--sky', c2); r.setProperty('--sky-deep', mezcla(c2, '#000000', .25)); r.setProperty('--sky-soft', mezcla(c2, '#ffffff', .86));
-  r.setProperty('--ok', c1); r.setProperty('--ok-soft', mezcla(c1, '#ffffff', .88));
+  S.temaActual = [c1, c2, stripe];
+  var r = document.documentElement.style, W = oscuroOn() ? '#0F1522' : '#ffffff';
+  if(oscuroOn() && oscuro(c1)) c1 = mezcla(c1, '#ffffff', .42);
+  r.setProperty('--green', c1); r.setProperty('--green-deep', mezcla(c1, '#000000', .2)); r.setProperty('--green-soft', mezcla(c1, W, .86));
+  r.setProperty('--sky', c2); r.setProperty('--sky-deep', mezcla(c2, '#000000', .25)); r.setProperty('--sky-soft', mezcla(c2, W, .84));
+  r.setProperty('--ok', c1); r.setProperty('--ok-soft', mezcla(c1, W, .86));
   r.setProperty('--on-green', oscuro(c1) ? '#fff' : '#0E1B3D');
   r.setProperty('--stripe', stripe || ('linear-gradient(90deg,' + c1 + ' 0%,' + c1 + ' 55%,' + c2 + ' 55%,' + c2 + ' 100%)'));
-  r.setProperty('--metal', 'linear-gradient(115deg,' + mezcla(c1, '#ffffff', .9) + ' 0%,' + mezcla(c2, '#ffffff', .9) + ' 60%,#F7F9F8 100%)');
+  r.setProperty('--metal', 'linear-gradient(115deg,' + mezcla(c1, W, .88) + ' 0%,' + mezcla(c2, W, .88) + ' 60%,' + (oscuroOn() ? '#141C2B' : '#F7F9F8') + ' 100%)');
 }
 var CELESTE = '#3E9FD8', GRANATE = '#7B1E30', AMARILLO = '#F2C230';
 function temaMetodix(){ document.body.classList.add('brand');
@@ -1230,6 +1263,7 @@ document.addEventListener('submit', async function(e){
 
 /* Devuelve {db, dl, u} si hay sesión y club; si no, muestra la pantalla de acceso y devuelve null */
 async function sbInit(){
+  aplicaApariencia();
   if(!window.supabase){ acceso('entrar', 'No se ha podido cargar la conexión. Comprueba tu internet y recarga la página.'); return null; }
   SB = window.supabase.createClient(SB_URL, SB_KEY, {auth: {flowType: 'implicit', detectSessionInUrl: true, persistSession: true}});
   if(/type=recovery/.test(location.hash)){
@@ -1238,21 +1272,21 @@ async function sbInit(){
   }
   var ses = (await SB.auth.getSession()).data.session;
   if(!ses){ acceso('entrar'); return null; }
-  var uid = ses.user.id;
-  var c = await SB.rpc('mi_cuenta');
-  CUENTA = c.data;
-  if(!CUENTA){
-    var md = ses.user.user_metadata || {};
-    if(md.codigo){
-      var j = await SB.rpc('unirse_club', {codigo: md.codigo, nombre: md.nombre || ''});
-      if(!j.error){ CUENTA = (await SB.rpc('mi_cuenta')).data; }
-    }
+  var uid = ses.user.id, md = ses.user.user_metadata || {};
+  S.email = ses.user.email || '';
+  var inv = await SB.rpc('aceptar_invitacion');
+  var invClub = (!inv.error && inv.data && inv.data.club_id) ? inv.data.club_id : null;
+  var lista = (await SB.rpc('mis_clubes')).data || [];
+  if(!lista.length && md.codigo){
+    var j = await SB.rpc('unirse_club', {codigo: md.codigo, nombre: md.nombre || ''});
+    if(!j.error) lista = (await SB.rpc('mis_clubes')).data || [];
   }
-  if(!CUENTA){
-    var inv = await SB.rpc('aceptar_invitacion');
-    if(!inv.error && inv.data){ CUENTA = (await SB.rpc('mi_cuenta')).data; S.bienvenida = true; }
-  }
-  if(!CUENTA){ acceso('club'); return null; }
+  if(!lista.length){ acceso('club'); return null; }
+  S.misClubes = lista;
+  var pref = invClub; try{ pref = pref || localStorage.getItem('metodix-club'); }catch(e){}
+  CUENTA = lista.find(function(x){ return x.club_id === pref; }) || lista[0];
+  try{ localStorage.setItem('metodix-club', CUENTA.club_id); }catch(e){}
+  if(invClub && md.sinClave) S.bienvenida = true;
   if(S.bienvenida || (ses.user.user_metadata || {}).sinClave){ S.clubName = CUENTA.club; acceso('bienvenida'); temaClub(CUENTA.color1, CUENTA.color2); return null; }
   S.clubName = CUENTA.club;
   temaClub(CUENTA.color1, CUENTA.color2);
@@ -1655,6 +1689,82 @@ document.addEventListener('click', async function(e){
   b.disabled = false;
 });
 
+/* ================= MENÚ DE USUARIO: perfil, clubes, apariencia ================= */
+S.misClubes = []; S.email = '';
+function oscuroOn(){ try{ return localStorage.getItem('metodix-tema') === 'oscuro'; }catch(e){ return false; } }
+function aplicaApariencia(){
+  document.body.classList.toggle('oscuro', oscuroOn());
+  if(S.temaActual) aplicaTema.apply(null, S.temaActual);
+}
+function iniciales(n){ var p = String(n || '?').trim().split(/\s+/); return ((p[0] || '?')[0] + (p[1] ? p[1][0] : '')).toUpperCase(); }
+function rolTxt(r){ return r === 'coord' ? 'Coordinación' : 'Entrenador'; }
+function vMenu(){
+  var c = CUENTA || {};
+  var h = '<div class="um-panel" role="dialog" aria-label="Mi cuenta">' +
+    '<div class="um-sec" style="display:flex;gap:12px;align-items:center"><span class="um-av big">' + esc(iniciales(c.nombre)) + '</span><span><b>' + esc(c.nombre || 'Sin nombre') + '</b><br><span class="isub">' + esc(S.email) + '</span></span></div>';
+  h += '<div class="um-sec"><b class="um-h">Mis clubes</b>' + S.misClubes.map(function(x){
+    var act = x.club_id === c.club_id;
+    return '<button type="button" class="um-club' + (act ? ' on' : '') + '" data-um="club" data-id="' + esc(x.club_id) + '"' + (act ? ' aria-current="true"' : '') + '>' +
+      (x.escudo ? '<img src="' + x.escudo + '" alt="">' : '<span class="um-sw" style="background:linear-gradient(135deg,' + esc(x.color1) + ' 50%,' + esc(x.color2) + ' 50%)"></span>') +
+      '<span><b>' + esc(x.club) + '</b><br><span class="isub">' + rolTxt(x.rol) + (act ? ' · ahora' : '') + '</span></span></button>';
+  }).join('') +
+    '<div class="row" style="margin-top:6px"><input id="um-cod" placeholder="Código de otro club" autocapitalize="characters" style="flex:1;min-width:0"><button type="button" class="btn small" data-um="unirse">Unirme</button></div></div>';
+  h += '<div class="um-sec"><b class="um-h">Apariencia</b><div class="row"><button type="button" class="chip" data-um="claro" aria-pressed="' + !oscuroOn() + '">Claro</button><button type="button" class="chip" data-um="oscuro" aria-pressed="' + oscuroOn() + '">Oscuro</button></div></div>';
+  h += '<div class="um-sec"><b class="um-h">Mi perfil</b>' +
+    '<div class="field"><label for="um-nom">Nombre y apellidos</label><div class="row"><input id="um-nom" value="' + esc(c.nombre || '') + '" style="flex:1;min-width:0"><button type="button" class="btn ghost small" data-um="nombre">Guardar</button></div></div>' +
+    '<div class="field"><label for="um-pass">Nueva contraseña</label><div class="row"><input id="um-pass" type="password" autocomplete="new-password" minlength="6" style="flex:1;min-width:0"><button type="button" class="btn ghost small" data-um="pass">Cambiar</button></div></div></div>';
+  h += '<div class="um-sec row" style="justify-content:space-between">' + (S.misClubes.length > 1 ? '<button type="button" class="btn ghost small" data-um="dejar">Salir de este club</button>' : '<span></span>') +
+    '<button type="button" class="btn danger small" data-acc="salir">Cerrar sesión</button></div></div>';
+  return h;
+}
+function abreMenu(){
+  var m = document.getElementById('userMenu');
+  if(!m){ m = document.createElement('div'); m.id = 'userMenu'; document.body.appendChild(m); }
+  if(m.innerHTML){ m.innerHTML = ''; return; }
+  m.innerHTML = '<div class="um-back" data-um="cerrar"></div>' + vMenu();
+}
+function cierraMenu(){ var m = document.getElementById('userMenu'); if(m) m.innerHTML = ''; }
+function refrescaMenu(){ var m = document.getElementById('userMenu'); if(m && m.innerHTML) m.innerHTML = '<div class="um-back" data-um="cerrar"></div>' + vMenu(); }
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') cierraMenu(); });
+document.addEventListener('click', async function(e){
+  var b = e.target.closest('[data-um]'); if(!b) return;
+  var a = b.dataset.um;
+  if(a === 'abrir'){ abreMenu(); return; }
+  if(a === 'cerrar'){ cierraMenu(); return; }
+  if(a === 'claro' || a === 'oscuro'){ try{ localStorage.setItem('metodix-tema', a); }catch(err){} aplicaApariencia(); refrescaMenu(); return; }
+  if(!SB) return;
+  if(a === 'club'){ if(b.dataset.id === CUENTA.club_id){ cierraMenu(); return; } try{ localStorage.setItem('metodix-club', b.dataset.id); localStorage.removeItem(LS + '-rol'); }catch(err){} location.reload(); return; }
+  b.disabled = true;
+  try{
+    if(a === 'unirse'){
+      var cod = document.getElementById('um-cod').value.trim();
+      if(!cod){ toast('Escribe el código del club.'); b.disabled = false; return; }
+      var r = await SB.rpc('unirse_club', {codigo: cod, nombre: CUENTA.nombre || ''});
+      if(r.error) throw r.error;
+      try{ localStorage.setItem('metodix-club', r.data.club_id); localStorage.removeItem(LS + '-rol'); }catch(err){}
+      toast('Te has unido a ' + r.data.club); setTimeout(function(){ location.reload(); }, 700);
+    } else if(a === 'nombre'){
+      var n = document.getElementById('um-nom').value.trim();
+      if(!n){ toast('Escribe tu nombre.'); b.disabled = false; return; }
+      var r2 = await SB.rpc('cambiar_nombre', {n: n}); if(r2.error) throw r2.error;
+      CUENTA.nombre = n; S.misClubes.forEach(function(x){ x.nombre = n; }); toast('Nombre guardado'); refrescaMenu(); softRender();
+    } else if(a === 'pass'){
+      var p = document.getElementById('um-pass').value;
+      if(p.length < 6){ toast('La contraseña necesita al menos 6 caracteres.'); b.disabled = false; return; }
+      var r3 = await SB.auth.updateUser({password: p}); if(r3.error) throw r3.error;
+      document.getElementById('um-pass').value = ''; toast('Contraseña cambiada');
+    } else if(a === 'dejar'){
+      var r4 = await SB.rpc('salir_club', {c: CUENTA.club_id}); if(r4.error) throw r4.error;
+      try{ localStorage.removeItem('metodix-club'); localStorage.removeItem(LS + '-rol'); }catch(err){}
+      location.reload();
+    }
+  }catch(err){
+    var m = (err && err.message) || '';
+    toast(/no válido/i.test(m) ? 'Ese código no corresponde a ningún club.' : /único/i.test(m) ? m + '.' : 'No se ha podido completar: ' + m);
+  }
+  b.disabled = false;
+});
+
 async function init(){
   var db = null, u = null;
   if(window.claude && typeof window.claude.use === 'function'){
@@ -2003,7 +2113,7 @@ app.addEventListener('toggle', function(ev){
 
 /* ================= VISTAS ================= */
 function band(){
-  return '<header class="band"><div class="inner">'+(SB ? '<img src="favicon.svg" alt="" width="44" height="44" style="border-radius:11px;flex:none">' : '')+'<h1 style="margin-right:auto">'+(SB ? 'Metodix' : 'Sesiones Cimadevilla')+'<small>Borradores, revisión y valoración</small></h1><span class="club">'+(SB && CUENTA && CUENTA.escudo ? '<img src="'+CUENTA.escudo+'" alt="" style="width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:8px">' : '')+esc(S.clubName || 'Cimadevilla CF')+' · 26/27'+(SB ? ' <button type="button" class="btn ghost small" data-acc="salir" style="margin-left:10px">Salir</button>' : '')+'</span></div></header>' +
+  return '<header class="band"><div class="inner">'+(SB ? '<img src="favicon.svg" alt="" width="44" height="44" style="border-radius:11px;flex:none">' : '')+'<h1 style="margin-right:auto">'+(SB ? 'Metodix' : 'Sesiones Cimadevilla')+'<small>Borradores, revisión y valoración</small></h1><span class="club">'+(SB && CUENTA && CUENTA.escudo ? '<img src="'+CUENTA.escudo+'" alt="" style="width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:8px">' : '')+esc(S.clubName || 'Cimadevilla CF')+' · 26/27'+(SB ? ' <button type="button" class="um-av" data-um="abrir" aria-label="Mi cuenta" title="Mi cuenta" style="margin-left:10px">'+esc(iniciales(CUENTA && CUENTA.nombre))+'</button>' : '')+'</span></div></header>' +
     '<nav class="roles" aria-label="Quién eres"><div class="inner"><div class="chips" role="group">' +
     (SB && CUENTA && CUENTA.admin ? '<button type="button" class="chip coord" data-act="role" data-r="admin" aria-pressed="'+(S.role === 'admin')+'">Metodix</button>' : '') +
     (ME.owner ? '<button type="button" class="chip coord" data-act="role" data-r="coord" aria-pressed="'+(S.role === 'coord')+'">Coordinación</button>' : '') +
