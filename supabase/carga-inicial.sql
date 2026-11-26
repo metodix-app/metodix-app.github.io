@@ -3,6 +3,8 @@
 insert into public.admins (email) values ('carlsan4444@gmail.com') on conflict do nothing;
 
 -- ---------- Datos iniciales desde el repositorio ----------
+-- (se ejecutó una vez el 26/11/2026; el archivo del banco se quitó después del repositorio
+--  porque incluye fichas con derechos de autor que solo puede ver el Cimadevilla)
 create extension if not exists http with schema extensions;
 
 insert into public.config_general (id, data)
