@@ -2238,6 +2238,12 @@ function vHome(){
   var days = teamDays(t), list = weekDates(t.id, S.week);
   if(sinPlan()){
     h += '<div class="section-h"><h2>'+esc(t.n)+'</h2><span>'+ETAPAS[t.e]+'</span></div>';
+    var dias = daysOn(t, S.week), fs = [];
+    for(var i = 0; i < 7; i++){ var f0 = addDays(S.week, i); if(dias.indexOf(pdate(f0).getDay()) >= 0) fs.push(f0); }
+    if(fs.length) h += '<ul class="list">' + fs.map(function(f){
+      return '<li><div class="item" style="cursor:default"><span class="date">'+fdate(f,'day')+'<small>'+fdate(f,'mon')+'</small></span><span><span class="iname">'+esc(DOW[pdate(f).getDay()])+' · Entrenamiento</span><span class="isub">'+esc([t.hora ? 'De '+t.hora.replace('-',' a ') : '', t.lugar].filter(Boolean).join(' · ') || 'Sin planificación de sesiones')+'</span></span><span></span></div></li>';
+    }).join('') + '</ul>';
+    else h += '<div class="empty"><strong>Faltan los días de entrenamiento</strong>Coordinación puede añadirlos en «Días de entrenamiento».</div>';
     h += vPartidosEquipo(t) + rosterHtml(t) + evCard(t) + vNuevoPartido(t) + vPropTeam(t);
     return h + '</main>';
   }
