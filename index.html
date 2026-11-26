@@ -443,8 +443,9 @@ function hash(s){ var h = 0; for(var i = 0; i < s.length; i++) h = (h*31 + s.cha
 var toastT;
 function toast(m){ var el = document.getElementById('toast'); el.textContent = m; clearTimeout(toastT); toastT = setTimeout(function(){ el.textContent = ''; }, 2800); }
 function team(id){ return TEAMS.find(function(t){ return t.id === id; }); }
-function altOk(t, f){ if(!t.alt) return true; var w = Math.round((pdate(monday(f)) - pdate(monday(t.alt.ref))) / 604800000); return ((w % 2) + 2) % 2 === t.alt.par; }
-function daysOn(t, f){ return teamDays(t).filter(function(d){ return !t.alt || d !== t.alt.d || altOk(t, f); }); }
+function teamAlt(t){ var c = S.config && S.config[t.id]; return c && c.alt !== undefined ? c.alt : (t.alt || null); }
+function altOk(t, f){ var al = teamAlt(t); if(!al) return true; var w = Math.round((pdate(monday(f)) - pdate(monday(al.ref))) / 604800000); return ((w % 2) + 2) % 2 === al.par; }
+function daysOn(t, f){ var al = teamAlt(t); return teamDays(t).filter(function(d){ return !al || d !== al.d || altOk(t, f); }); }
 function teamDays(t){ var c = S.config && S.config[t.id]; return c && Array.isArray(c.dias) ? c.dias : t.dias; }
 function mesoFor(f){
   var m = MESOS.find(function(x){ return f >= x.ini && f <= x.fin; });
@@ -2464,7 +2465,8 @@ function vCoord(){
   h += '<div class="section-h"><h2>Días de entrenamiento</h2><span>Los borradores salen de estos días</span></div><div class="card" style="display:grid;gap:12px">';
   TEAMS.forEach(function(t){
     var d = teamDays(t);
-    var altTxt = t.alt ? '<span class="note" style="margin:0">'+DOW[t.alt.d]+' alterno: '+(t.alt.par === 0 ? 'empieza el 20/11' : 'empieza el 27/11')+'</span>' : '';
+    var al = teamAlt(t), altW = al ? addDays(monday(al.ref), al.par * 7) : '';
+    var altTxt = '<span class="note alt-ed" style="margin:0;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-weight:400">Alterno: <select data-alt="d" data-t="'+t.id+'"'+(S.readOnly ? ' disabled' : '')+'><option value="">Ninguno</option>'+d.map(function(k){ return '<option value="'+k+'"'+(al && al.d === k ? ' selected' : '')+'>'+DOW[k]+'</option>'; }).join('')+'</select>'+(al ? ' una semana sí y otra no, desde la del <input type="date" data-alt="ref" data-t="'+t.id+'" value="'+esc(altW)+'"'+(S.readOnly ? ' disabled' : '')+'>' : '')+'</span>';
     h += '<div class="row" style="justify-content:space-between"><b style="font:600 18px/1 var(--display);min-width:150px">'+esc(t.n)+altTxt.replace('<span','<br><span')+'</b><div class="days">'+[1,2,3,4,5,6,0].map(function(k){ return '<label><input type="checkbox" data-act="day" data-t="'+t.id+'" data-d="'+k+'"'+(d.indexOf(k) >= 0 ? ' checked' : '')+(S.readOnly ? ' disabled' : '')+'>'+DOW[k].slice(0,3)+'</label>'; }).join('')+'</div></div>';
   });
   h += '</div>';
@@ -2599,6 +2601,11 @@ app.addEventListener('change', async function(ev){
     var tid = t.dataset.t, d = +t.dataset.d, cur0 = teamDays(team(tid)).slice();
     if(t.checked){ if(cur0.indexOf(d) < 0) cur0.push(d); } else cur0 = cur0.filter(function(x){ return x !== d; });
     S.config[tid] = Object.assign({}, S.config[tid], {dias:cur0}); await saveConfig(); render();
+  } else if(t.dataset && t.dataset.alt){
+    var tm = team(t.dataset.t), al0 = teamAlt(tm), nv;
+    if(t.dataset.alt === 'd') nv = t.value === '' ? null : {d: +t.value, ref: al0 ? addDays(monday(al0.ref), al0.par * 7) : S.week, par: 0};
+    else nv = t.value ? {d: al0.d, ref: monday(t.value), par: 0} : al0;
+    S.config[tm.id] = Object.assign({}, S.config[tm.id], {alt: nv}); await saveConfig(); render(); toast(nv ? 'Día alterno guardado' : 'Sin día alterno');
   } else if(t.dataset && t.dataset.asis){
     var sa = cur(); if(!sa) return; sa.asis = sa.asis || {};
     if(t.value) sa.asis[t.dataset.asis] = t.value; else delete sa.asis[t.dataset.asis];
