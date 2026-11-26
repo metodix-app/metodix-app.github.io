@@ -1,0 +1,158 @@
+{
+ "teams": [
+  {
+   "id": "pbj",
+   "n": "Prebenjamín",
+   "e": "ini",
+   "mod": "sala",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 90,
+   "hora": "16:00-17:30",
+   "lugar": "Pista de El Lauredal"
+  },
+  {
+   "id": "bja",
+   "n": "Benjamín A",
+   "e": "ini",
+   "mod": "sala",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 90,
+   "hora": "18:45-20:15",
+   "lugar": "Colegio Jove"
+  },
+  {
+   "id": "bjb",
+   "n": "Benjamín B",
+   "e": "ini",
+   "mod": "sala",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 90,
+   "hora": "19:00-20:30",
+   "lugar": "Colegio El Lloreu"
+  },
+  {
+   "id": "ale",
+   "n": "Alevín",
+   "e": "des",
+   "mod": "campo",
+   "dias": [
+    1,
+    2,
+    4
+   ],
+   "dur": 90
+  },
+  {
+   "id": "inf",
+   "n": "Infantil",
+   "e": "per",
+   "mod": "campo",
+   "dias": [
+    2,
+    4,
+    5
+   ],
+   "dur": 90,
+   "cortos": [
+    5
+   ],
+   "alt": {
+    "d": 5,
+    "ref": "2026-11-20",
+    "par": 0
+   }
+  },
+  {
+   "id": "cad",
+   "n": "Cadete",
+   "e": "per",
+   "mod": "campo",
+   "dias": [
+    2,
+    4,
+    5
+   ],
+   "dur": 90,
+   "alt": {
+    "d": 5,
+    "ref": "2026-11-20",
+    "par": 1
+   }
+  }
+ ],
+ "mesos": [
+  {
+   "id": "2.1",
+   "p": "pm",
+   "sp": null,
+   "s": "Ofrecer línea de pase",
+   "ini": "2026-11-02",
+   "fin": "2026-11-29"
+  },
+  {
+   "id": "2.2",
+   "p": "pf",
+   "sp": "pm",
+   "s": "Pase y movimiento",
+   "ini": "2026-11-30",
+   "fin": "2026-12-20"
+  },
+  {
+   "id": "2.3",
+   "p": "pa",
+   "sp": "pf",
+   "s": "Perfil y orientación",
+   "ini": "2027-01-07",
+   "fin": "2027-01-31"
+  },
+  {
+   "id": "3.1",
+   "p": "sb",
+   "sp": "pa",
+   "s": "Superioridades",
+   "ini": "2027-02-01",
+   "fin": "2027-02-28"
+  },
+  {
+   "id": "3.2",
+   "p": "ap",
+   "sp": "sb",
+   "s": "Salida de balón y progresión",
+   "ini": "2027-03-01",
+   "fin": "2027-03-21"
+  },
+  {
+   "id": "3.3",
+   "p": "rp",
+   "sp": "ap",
+   "s": "Amplitud y profundidad",
+   "ini": "2027-04-05",
+   "fin": "2027-04-25"
+  },
+  {
+   "id": "4.1",
+   "p": "jc",
+   "sp": "rp",
+   "s": "Reacción tras pérdida",
+   "ini": "2027-04-26",
+   "fin": "2027-05-23"
+  },
+  {
+   "id": "4.2",
+   "p": "co",
+   "sp": null,
+   "s": "Según lo que haya fallado",
+   "ini": "2027-05-24",
+   "fin": "2027-06-20"
+  }
+ ]
+}

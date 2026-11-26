@@ -1,0 +1,139 @@
+{
+ "teams": [
+  {
+   "id": "pbj",
+   "n": "Prebenjamín",
+   "e": "ini",
+   "mod": "sala",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 60
+  },
+  {
+   "id": "bjm",
+   "n": "Benjamín",
+   "e": "ini",
+   "mod": "sala",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 75
+  },
+  {
+   "id": "ale",
+   "n": "Alevín",
+   "e": "des",
+   "mod": "campo",
+   "dias": [
+    1,
+    3
+   ],
+   "dur": 90
+  },
+  {
+   "id": "inf",
+   "n": "Infantil",
+   "e": "per",
+   "mod": "campo",
+   "dias": [
+    1,
+    3,
+    5
+   ],
+   "dur": 90
+  },
+  {
+   "id": "cad",
+   "n": "Cadete",
+   "e": "per",
+   "mod": "campo",
+   "dias": [
+    1,
+    3,
+    5
+   ],
+   "dur": 90
+  },
+  {
+   "id": "juv",
+   "n": "Juvenil",
+   "e": "ren",
+   "mod": "campo",
+   "dias": [
+    1,
+    3,
+    5
+   ],
+   "dur": 90
+  }
+ ],
+ "mesos": [
+  {
+   "id": "1",
+   "p": "pm",
+   "sp": null,
+   "s": "Ofrecer línea de pase",
+   "ini": "2026-09-07",
+   "fin": "2026-10-11"
+  },
+  {
+   "id": "2",
+   "p": "pf",
+   "sp": "pm",
+   "s": "Pase y movimiento",
+   "ini": "2026-10-12",
+   "fin": "2026-11-15"
+  },
+  {
+   "id": "3",
+   "p": "pa",
+   "sp": "pf",
+   "s": "Perfil y orientación",
+   "ini": "2026-11-16",
+   "fin": "2026-12-20"
+  },
+  {
+   "id": "4",
+   "p": "sb",
+   "sp": "pa",
+   "s": "Superioridades",
+   "ini": "2027-01-07",
+   "fin": "2027-02-07"
+  },
+  {
+   "id": "5",
+   "p": "ap",
+   "sp": "sb",
+   "s": "Salida de balón y progresión",
+   "ini": "2027-02-08",
+   "fin": "2027-03-14"
+  },
+  {
+   "id": "6",
+   "p": "rp",
+   "sp": "ap",
+   "s": "Amplitud y profundidad",
+   "ini": "2027-03-15",
+   "fin": "2027-04-18"
+  },
+  {
+   "id": "7",
+   "p": "jc",
+   "sp": "rp",
+   "s": "Reacción tras pérdida",
+   "ini": "2027-04-19",
+   "fin": "2027-05-23"
+  },
+  {
+   "id": "8",
+   "p": "co",
+   "sp": null,
+   "s": "Según lo que haya fallado",
+   "ini": "2027-05-24",
+   "fin": "2027-06-20"
+  }
+ ]
+}
