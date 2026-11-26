@@ -329,6 +329,11 @@ body.oscuro .banner{background:#1A2A3A}
 body.oscuro .note,body.oscuro .isub{color:var(--muted)}
 body.oscuro .band h1,body.oscuro .band .club{color:var(--ink)}
 body.oscuro img[src^="img/"]{filter:brightness(.92)}
+
+.pill.gana{background:#DDF0E3;color:#1F6B3A}.pill.pierde{background:#F7DEDB;color:#B3261E}.pill.empata{background:#F6EBD2;color:#A86A06}
+.date.partido-d{background:var(--gold);color:var(--navy)}.date.partido-d small{color:var(--navy)}
+body.oscuro .pill.gana{background:#1E3B2A;color:#9BD8AE}body.oscuro .pill.pierde{background:#3E1F1D;color:#F2A9A2}body.oscuro .pill.empata{background:#3C301A;color:#EBC77A}
+/* ===== Partidos ===== */
 </style>
 </head>
 <body>
@@ -1765,6 +1770,97 @@ document.addEventListener('click', async function(e){
   b.disabled = false;
 });
 
+/* ================= PARTIDOS: calendario y valoración de jugadores ================= */
+S.partidos = {};
+function durPartido(t){ var n = (t && t.n || '').toLowerCase(); return /cadete|juvenil/.test(n) ? 90 : /infantil/.test(n) ? 80 : /alev/.test(n) ? 60 : 50; }
+function enCampo(t){ if(!t) return 7; if(t.mod === 'sala') return 5; return (t.e === 'per' || t.e === 'ren') ? 11 : 7; }
+function partidosDe(tid){ return Object.keys(S.partidos).map(function(k){ return S.partidos[k]; }).filter(function(p){ return p.equipo === tid; }).sort(function(a, b){ return (a.fecha + (a.hora || '')).localeCompare(b.fecha + (b.hora || '')); }); }
+function partidosSemana(tid, ini){ var fin = addDays(ini, 6); return partidosDe(tid).filter(function(p){ return p.fecha >= ini && p.fecha <= fin; }); }
+function vsTxt(p){ var c = S.clubName || 'Nosotros'; return p.local ? c + ' vs ' + p.rival : p.rival + ' vs ' + c; }
+function resTxt(p){ return (p.gf !== '' && p.gf != null && p.gc !== '' && p.gc != null) ? (p.gf + ' - ' + p.gc) : ''; }
+function resPill(p){
+  var r = resTxt(p); if(!r) return '<span class="pill">Sin resultado</span>';
+  var gf = +p.gf, gc = +p.gc;
+  return '<span class="pill ' + (gf > gc ? 'gana' : gf < gc ? 'pierde' : 'empata') + '">' + (gf > gc ? 'Victoria' : gf < gc ? 'Derrota' : 'Empate') + ' ' + esc(r) + '</span>';
+}
+function partidoItem(p){
+  return '<li><button type="button" class="item" data-pt="abrir" data-id="' + esc(p.id) + '"><span class="date partido-d">' + fdate(p.fecha, 'day') + '<small>' + fdate(p.fecha, 'mon') + '</small></span>' +
+    '<span><span class="iname">' + esc(DOW[pdate(p.fecha).getDay()]) + ' · Partido · ' + esc(vsTxt(p)) + '</span>' +
+    '<span class="isub">' + [p.hora ? p.hora + ' h' : '', p.local ? 'En casa' : 'Fuera', p.campo, p.jornada ? 'Jornada ' + p.jornada : ''].filter(Boolean).map(esc).join(' · ') + '</span>' +
+    '<span class="tags">' + resPill(p) + '</span></span><span aria-hidden="true">›</span></button></li>';
+}
+function vPartidosEquipo(t){
+  if(!SB) return '';
+  var sem = partidosSemana(t.id, S.week);
+  var prox = partidosDe(t.id).filter(function(p){ return p.fecha > addDays(S.week, 6); })[0];
+  var h = '';
+  if(sem.length) h += '<div class="section-h"><h2>Partidos de la semana</h2><span>' + sem.length + '</span></div><ul class="list">' + sem.map(partidoItem).join('') + '</ul>';
+  else if(prox) h += '<p class="note">Próximo partido: <b>' + esc(fdate(prox.fecha, 'short')) + '</b> ' + esc(prox.local ? 'contra ' + prox.rival + ' en casa' : 'en el campo de ' + prox.rival) + '.</p>';
+  return h;
+}
+function vNuevoPartido(t){
+  if(!SB || S.readOnly) return '';
+  return '<details class="card" style="margin-top:14px"><summary style="cursor:pointer;font:700 17px/1.2 var(--display)">Añadir partido (amistoso, torneo o cambio de fecha)</summary>' +
+    '<div class="grid2" style="margin-top:10px"><div class="field"><label for="np-f">Fecha</label><input id="np-f" type="date" value="' + esc(S.week) + '"></div>' +
+    '<div class="field"><label for="np-h">Hora</label><input id="np-h" type="time"></div>' +
+    '<div class="field"><label for="np-r">Rival</label><input id="np-r" placeholder="Nombre del rival"></div>' +
+    '<div class="field"><label for="np-l">Dónde</label><select id="np-l"><option value="1">En casa</option><option value="0">Fuera</option></select></div>' +
+    '<div class="field"><label for="np-c">Campo</label><input id="np-c"></div>' +
+    '<div class="field"><label for="np-t">Tipo</label><select id="np-t"><option>Liga</option><option>Amistoso</option><option>Torneo</option><option>Copa</option></select></div></div>' +
+    '<button type="button" class="btn" data-pt="crear" data-t="' + t.id + '" style="margin-top:8px">Añadir partido</button></details>';
+}
+function vPartido(){
+  var p = S.partidos[S.view.id]; if(!p) return vHome();
+  var t = team(p.equipo), ed = !S.readOnly;
+  var dur = +p.dur || durPartido(t);
+  var h = '<div class="subbar"><div class="inner"><button type="button" data-act="home">‹ Volver</button><span class="sbt">' + esc(t ? t.n : '') + ' · Partido · ' + esc(fdate(p.fecha, 'short')) + '</span></div></div><main class="inner">';
+  h += '<div class="section-h"><h2>' + esc(vsTxt(p)) + '</h2><span>' + esc(p.tipo || 'Liga') + (p.jornada ? ' · Jornada ' + esc(p.jornada) : '') + '</span></div>';
+  h += '<div class="card" style="display:grid;gap:10px"><div class="grid2" style="margin-top:0">' +
+    '<div class="field"><label for="pp-f">Fecha</label><input id="pp-f" type="date" value="' + esc(p.fecha) + '"' + (ed ? '' : ' disabled') + '></div>' +
+    '<div class="field"><label for="pp-h">Hora</label><input id="pp-h" type="time" value="' + esc(p.hora || '') + '"' + (ed ? '' : ' disabled') + '></div>' +
+    '<div class="field"><label for="pp-r">Rival</label><input id="pp-r" value="' + esc(p.rival || '') + '"' + (ed ? '' : ' disabled') + '></div>' +
+    '<div class="field"><label for="pp-l">Dónde</label><select id="pp-l"' + (ed ? '' : ' disabled') + '><option value="1"' + (p.local ? ' selected' : '') + '>En casa</option><option value="0"' + (p.local ? '' : ' selected') + '>Fuera</option></select></div>' +
+    '<div class="field"><label for="pp-c">Campo</label><input id="pp-c" value="' + esc(p.campo || '') + '"' + (ed ? '' : ' disabled') + '></div>' +
+    '<div class="field"><label for="pp-d">Duración (min)</label><input id="pp-d" type="number" min="10" max="120" value="' + dur + '"' + (ed ? '' : ' disabled') + '></div></div>' +
+    '<div class="row" style="align-items:end"><div class="field"><label for="pp-gf">Goles nuestros</label><input id="pp-gf" type="number" min="0" style="width:90px" value="' + esc(p.gf == null ? '' : p.gf) + '"' + (ed ? '' : ' disabled') + '></div>' +
+    '<div class="field"><label for="pp-gc">Goles del rival</label><input id="pp-gc" type="number" min="0" style="width:90px" value="' + esc(p.gc == null ? '' : p.gc) + '"' + (ed ? '' : ' disabled') + '></div></div></div>';
+  h += '<div class="field" style="margin-top:12px"><label for="pp-obs">Observaciones del partido</label><textarea id="pp-obs"' + (ed ? '' : ' disabled') + '>' + esc(p.obs || '') + '</textarea></div>';
+  if(ed) h += '<div class="row" style="margin-top:10px"><button type="button" class="btn" data-pt="guardar">Guardar partido</button><button type="button" class="btn danger" data-pt="borrar">Borrar partido</button></div>';
+  return h + '</main>';
+}
+document.addEventListener('click', async function(e){
+  var b = e.target.closest('[data-pt]'); if(!b || !SB) return;
+  var a = b.dataset.pt;
+  if(a === 'abrir'){ go({name: 'partido', id: b.dataset.id}); return; }
+  b.disabled = true;
+  try{
+    if(a === 'crear'){
+      var f = document.getElementById('np-f').value, r = document.getElementById('np-r').value.trim();
+      if(!f || !r){ toast('Pon la fecha y el rival.'); b.disabled = false; return; }
+      var t = team(b.dataset.t), id = b.dataset.t + '_' + f + '_' + Math.random().toString(36).slice(2, 6);
+      var d = {equipo: b.dataset.t, fecha: f, hora: document.getElementById('np-h').value, rival: r, local: document.getElementById('np-l').value === '1',
+        campo: document.getElementById('np-c').value.trim(), tipo: document.getElementById('np-t').value, dur: durPartido(t), creado: Date.now()};
+      await S.db.doc('partidos/' + id).set(d);
+      S.partidos[id] = Object.assign({id: id}, d);
+      toast('Partido añadido'); go({name: 'partido', id: id});
+    } else if(a === 'guardar'){
+      var p = S.partidos[S.view.id];
+      function nv(id){ var el = document.getElementById(id); return el ? el.value : ''; }
+      var d2 = Object.assign({}, p, {fecha: nv('pp-f') || p.fecha, hora: nv('pp-h'), rival: nv('pp-r').trim() || p.rival, local: nv('pp-l') === '1', campo: nv('pp-c').trim(),
+        dur: +nv('pp-d') || p.dur, gf: nv('pp-gf') === '' ? null : +nv('pp-gf'), gc: nv('pp-gc') === '' ? null : +nv('pp-gc'), obs: nv('pp-obs').trim(), actualizado: Date.now()});
+      delete d2.id;
+      await S.db.doc('partidos/' + S.view.id).set(d2);
+      S.partidos[S.view.id] = Object.assign({id: S.view.id}, d2);
+      toast('Partido guardado'); stay();
+    } else if(a === 'borrar'){
+      if(b.dataset.ok !== '1'){ b.dataset.ok = '1'; b.textContent = 'Pulsa otra vez para borrar'; b.disabled = false; return; }
+      await S.db.doc('partidos/' + S.view.id).delete();
+      delete S.partidos[S.view.id]; toast('Partido borrado'); go({name: 'home'});
+    }
+  }catch(err){ toast('No se ha podido completar: ' + ((err && err.message) || '')); }
+  b.disabled = false;
+});
+
 async function init(){
   var db = null, u = null;
   if(window.claude && typeof window.claude.use === 'function'){
@@ -1782,6 +1878,7 @@ async function init(){
   else {
     var x = await sbInit(); if(!x) return;
     await cargaClub();
+    x.db.collection('partidos').onSnapshot(function(snap){ var m = {}; snap.docs.forEach(function(d){ m[d.id] = Object.assign({id: d.id}, d.data()); }); S.partidos = m; if(S.ready && S.view.name !== 'partido') softRender(); });
     if(CUENTA.admin) setTimeout(cargaAdmin, 1500);
     db = x.db; S.dl = x.dl; u = x.u; S.user = u;
     ME.owner = !!(await u.isOwner()); ME.uid = await u.id();
@@ -2149,8 +2246,10 @@ function vHome(){
         '<span><span class="iname">'+esc(DOW[pdate(f).getDay()])+' · '+esc(TIPOS[s.tipo||'media'])+' · '+esc(PR[s.pr])+'</span><span class="isub">Mesociclo '+esc(s.meso)+(s.paron ? ' (parón: se mantiene el último principio)' : '')+' · '+s.tareas.length+' ejercicios · '+s.tareas.reduce(function(a,x){ return a + (+x.dur||0); },0)+' min</span><span class="tags">'+statusPills(s)+'</span></span><span aria-hidden="true">›</span></button></li>';
     }).join('') + '</ul>';
   }
+  h += vPartidosEquipo(t);
   h += rosterHtml(t);
   h += evCard(t);
+  h += vNuevoPartido(t);
   h += vPropTeam(t);
   if(!S.readOnly) h += '<div class="card" style="margin-top:14px"><div class="row"><div class="field" style="flex:1;min-width:180px"><label for="nd">Sesión para otro día</label><input id="nd" type="date" value="'+esc(addDays(S.week, 0))+'"></div><button type="button" class="btn ghost" data-act="newDay" data-t="'+t.id+'" style="align-self:end">Crear borrador</button></div></div>';
   return h + '</main>';
@@ -2326,7 +2425,8 @@ function render(){
   if(S.view.name === 'session'){
     var s = S.view.s; if(s && S.sessions[s.id] && S.sessions[s.id] !== s && !s.dirty && (S.sessions[s.id].actualizado || 0) > (s.actualizado || 0)) S.view.s = JSON.parse(JSON.stringify(S.sessions[s.id]));
     app.innerHTML = vSession();
-  } else if(S.view.name === 'evjug') app.innerHTML = vEvJugador();
+  } else if(S.view.name === 'partido') app.innerHTML = vPartido();
+  else if(S.view.name === 'evjug') app.innerHTML = vEvJugador();
   else if(S.view.name === 'evaluar') app.innerHTML = vEvaluar();
   else if(S.view.name === 'evtabla') app.innerHTML = vEvTabla();
   else app.innerHTML = vHome();
